@@ -51,20 +51,20 @@
 			<tr>
 				<td>제목</td>
 				<td>
-					${notice.noticeTitle}
+					${noticeOne.noticeTitle}
 				</td>
 			</tr>
 			<tr>
 				<td>내용</td>
 				<td>
-					${notice.noticeContent}
+					${noticeOne.noticeContent}
 				</td>
 			</tr>
 		</table>
 		
 			<div class="d-flex" style="margin-bottom:13px;">
-				<a href="${pageContext.request.contextPath}/notice/updateNoticeOne?noticeNo=${notice.noticeNo}" style="margin-right:10px;">공지 수정</a>
-				<a href="${pageContext.request.contextPath}/notice/deleteNotice?noticeNo=${notice.noticeNo}">공지 삭제</a>
+				<a href="${pageContext.request.contextPath}/updateNotice?noticeNo=${noticeOne.noticeNo}" style="margin-right:10px;">공지 수정</a>
+				<a href="${pageContext.request.contextPath}/deleteNotice?noticeNo=${noticeOne.noticeNo}">공지 삭제</a>
 				<!--collapse start-->
 				<a href="#demo" data-bs-toggle="collapse" class="btn btn-dark" style="margin-left:auto">
 					댓글 : ${commentCount}개
@@ -76,14 +76,14 @@
 				<!---------------------- 댓글 작성창 start --------------------->
 				<div class="col-md-6">	
 					<c:if test="${memberId != null}">
-						<form method="post" action="${pageContext.request.contextPath}/comment/addComment">
-							<input type="hidden" value="${notice.noticeNo}" name="noticeNo">
+						<form method="post" action="${pageContext.request.contextPath}/addComment">
+							<input type="hidden" value="${noticeOne.noticeNo}" name="noticeNo">
 							<div class="mb-3 mt-3">
 								<label for="comment" class="form-label">댓글</label>
 								<textarea name="comment" id="comment" placeholder="댓글 입력하기" class="form-control" rows="3" style="resize:none; margin-bottom:10px;" maxlength="100"></textarea>		
 							</div>
 							<div class="form-check">
-							    <input class="form-check-input" type="checkbox" value="checked" id="flexCheckDefault" name="isSecret">
+							    <input class="form-check-input" type="checkbox" value="true" id="flexCheckDefault" name="isSecret">
 							    <label class="form-check-label" for="flexCheckDefault">비밀글</label>
 							</div>
 							<div>
@@ -103,21 +103,21 @@
 							<col width="10%">
 						</colgroup>
 							
-						<c:forEach var="list" items="${list}">
+						<c:forEach var="list" items="${commentList}">
 							<tr style="border-top : 1px solid black; border-bottom : 1px solid black;">
 								<td>${list.memberId}</td>
 								<td>
-									<a href="#">수정</a>
+									<a href="${pageContext.request.contextPath}/updateComment?commentNo=${list.commentNo}&memberId=${list.memberId}&noticeNo=${noticeOne.noticeNo}">수정</a>
 								</td>
 								<td>
-									<a href="#">삭제</a>
+									<a href="${pageContext.request.contextPath}/deleteComment?commentNo=${list.commentNo}&memberId=${list.memberId}&noticeNo=${noticeOne.noticeNo}">삭제</a>
 								</td>
 							</tr>
 							<tr>
-								<c:if test="${list.isSecret == false ||  list.memberId == memberId}">
+								<c:if test="${list.isSecret.equals('false') ||  list.memberId == memberId}">		
 									<td colspan="3">${list.comment}</td>
 								</c:if>
-								<c:if test="${list.isSecret == true && list.memberId != memberId}">
+								<c:if test="${list.isSecret.equals('true') && list.memberId != memberId}">
 									<td colspan="3" style="color:red;">비밀글입니다. (본인만 확인 가능)</td>
 								</c:if>
 							</tr>

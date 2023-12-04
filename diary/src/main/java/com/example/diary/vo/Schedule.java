@@ -9,4 +9,5 @@ public class Schedule {
 	private String scheduleDate;
 	private String scheduleMemo;
 	private String createdate;
+	private int scheduleEmoji;
 }

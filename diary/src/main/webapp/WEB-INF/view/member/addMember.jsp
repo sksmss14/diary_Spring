@@ -32,7 +32,7 @@
 	
 	<div style="margin-top:130px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h1>회원가입</h1>
-		<form id="addForm" method="post" action="${pageContext.request.contextPath}/member/addMember">
+		<form id="addForm" method="post" action="${pageContext.request.contextPath}/addMember">
 			<div class="mb-3 mt-3">
 			    <label for="memberId" class="form-label">아이디</label>
 			    <input type="text" class="form-control" id="memberId" name="memberId">
@@ -45,7 +45,7 @@
 			    <label for="memberPwCheck" class="form-label">비밀번호 확인</label>
 			    <input type="password" class="form-control" id="memberPwCheck" name="memberPwCheck">
 			</div>		
-			<button type="button" id="addBtn" style="margin-top:20px;">회원가입</button>
+			<button type="button" id="addBtn" style="margin-top:20px;" class="btn btn-dark">회원가입</button>
 		</form>
 	</div>
 </body>

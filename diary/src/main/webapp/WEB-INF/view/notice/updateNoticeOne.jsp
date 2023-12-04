@@ -6,8 +6,8 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
-	<!-- jsp 파일 -->
-	<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-3.7.1.min.js"></script>
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>	
 	
 	<!-- 부트스트랩 CDN -->
 	<!-- Latest compiled and minified CSS -->
@@ -33,22 +33,22 @@
 	
 	<div style="margin-top:50px; margin-bottom:50px; width:50%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h3>공지 수정</h3>
-		<form method="post" action="${pageContext.request.contextPath}/notice/updateNoticeOne">
-			<input type="hidden" value="${notice.noticeNo}" name="noticeNo">
+		<form method="post" action="${pageContext.request.contextPath}/updateNotice">
+			<input type="hidden" value="${noticeOne.noticeNo}" name="noticeNo">
 			
 			<div class="mb-3 mt-3">
 				<label for="noticeTitle" class="form-label">제목</label>
-			    <input type="text" class="form-control" id="noticeTitle" name="noticeTitle" value="${notice.noticeTitle}">
+			    <input type="text" class="form-control" id="noticeTitle" name="noticeTitle" value="${noticeOne.noticeTitle}">
 			</div>
 			<div class="mb-3">
 				<label for="noticeContent" class="form-label">내용</label>
-				<textarea name="noticeContent" id="noticeContent" class="form-control" rows="15" maxlength="1000" style="resize:none; margin-bottom:10px;">${notice.noticeContent}</textarea>			
+				<textarea name="noticeContent" id="noticeContent" class="form-control" rows="15" maxlength="1000" style="resize:none; margin-bottom:10px;">${noticeOne.noticeContent}</textarea>			
 			</div>
 			<div class="mb-3 mt-3">
 				<label for="password" class="form-label">비밀번호 입력</label>
 			    <input type="password" class="form-control" id="password" name="password">
 			</div>		
-			<button>수정하기</button>		
+			<button class="btn btn-dark">수정하기</button>		
 		</form>
 	</div>
 </body>

@@ -9,5 +9,5 @@ public class Comment {
 	private String memberId;
 	private String comment;
 	private String createdate;
-	private boolean isSecret;
+	private String isSecret;
 }

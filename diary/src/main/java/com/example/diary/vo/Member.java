@@ -10,4 +10,5 @@ public class Member {
 	private String memberPw;
 	private String createdate;
 	private int memberLevel;
+	
 }

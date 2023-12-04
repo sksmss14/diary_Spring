@@ -13,7 +13,6 @@
 		AND member_pw = PASSWORD(#{memberPw})
 	</select>
 	
-	<!-- 회원가입 -->
 	<insert id="insertMember" parameterType="com.example.diary.vo.Member">
 		INSERT INTO member(
 			member_id,
@@ -23,5 +22,19 @@
 			PASSWORD(#{memberPw})
 		)
 	</insert>
+	
+	<update id="updateMemberPw" parameterType="Map">
+		UPDATE member 
+		SET member_pw = PASSWORD(#{newPw}) 
+		WHERE member_id = #{memberId} 
+		AND member_pw = PASSWORD(#{oldPw})
+	</update>
+	
+	<delete id="deleteMember" parameterType="Map">
+		DELETE 
+		FROM member 
+		WHERE member_id = #{memberId} 
+		AND member_pw = PASSWORD(#{memberPw})
+	</delete>
 
 </mapper>

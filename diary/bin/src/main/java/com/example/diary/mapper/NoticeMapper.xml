@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.diary.mapper.NoticeMapper">
+	<insert id="insertNotice" parameterType="com.example.diary.vo.Notice">
+		INSERT INTO notice(
+			member_id, 
+			notice_title, 
+			notice_content
+		) VALUES(
+			#{memberId}, 
+			#{noticeTitle}, 
+			#{noticeContent}
+		)
+	</insert>
+</mapper>
