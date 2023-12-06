@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.diary.service.CalendarService;
 import com.example.diary.service.ScheduleService;
@@ -33,14 +34,13 @@ public class HomeController {
 	
 	@GetMapping("/home")
 	public String home(HttpSession session, Model model,
-			Integer targetYear, Integer targetMonth
-						) {
+			Integer targetYear, Integer targetMonth) {
 		// 로그인 후에만 접근 가능
 		if(session.getAttribute("loginMember") == null) {
 			return "redirect:/login";
 		}
 		Member loginMember = (Member) session.getAttribute("loginMember");
-				
+						
 		Map<String, Object> calendarMap = calendarService.getCalendar(targetYear, targetMonth);
 		model.addAttribute("calendarMap", calendarMap);
 		
@@ -57,5 +57,32 @@ public class HomeController {
 		log.debug("달력 데이터 목록 : " + calendarMap);
 		
 		return "home";
+	}
+		
+	@GetMapping("/updateCalendar")
+	public String lastCalendar(HttpSession session, Model model,
+								Integer targetYear, Integer targetMonth, 
+								@RequestParam(defaultValue = "0") int monthOffset) {
+		
+		targetMonth += monthOffset;
+		
+		Map<String, Object> calendarMap = calendarService.getCalendar(targetYear, targetMonth);
+		model.addAttribute("calendarMap", calendarMap);
+		
+		log.debug("달력 레이아웃 parameter : " + calendarMap);
+		
+		Member loginMember = (Member) session.getAttribute("loginMember");
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("memberId", loginMember.getMemberId());
+		paramMap.put("year", calendarMap.get("targetYear"));
+		paramMap.put("month", (Integer) calendarMap.get("targetMonth")+1);
+		
+		List<Map<String, Object>> list = scheduleService.getScheduleListByMonth(paramMap);
+		model.addAttribute("list", list);
+		
+		log.debug("달력 데이터 목록 : " + calendarMap);
+		
+		return "calendar/calendarFragment";
 	}
 }

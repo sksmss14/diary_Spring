@@ -6,6 +6,8 @@
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<!-- 부트스트랩 CDN -->
 	<!-- Latest compiled and minified CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,72 +37,51 @@
 	<div class="container" style="margin-top:40px; margin-bottom:70px">
 	   <h1>반갑습니다. ${loginMember.memberId}님</h1>
 	   <div style="margin-bottom : 10px;">
-			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth - 1}" class="btn btn-dark" id="lastMonth">이전 달</a>
-			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth + 1}" class="btn btn-dark" id="nextMonth">다음 달</a>
+			<button type="button" class="btn btn-dark" id="lastMonth" value="${calendarMap.targetMonth}">이전 달</button>
+			<button type="button" class="btn btn-dark" id="nextMonth">다음 달</button>
 		</div>
 		
-	   <h3 style="margin:20px 0 20px 0;">${calendarMap.targetYear}년 ${calendarMap.targetMonth + 1}월</h3>
-	   <!---------------------- 캘린더 start --------------------->
+	   <div id="calendarContainer"></div>
 	     
-	   <table class="table table-bordered" id="tb">
-	   		<colgroup>
-				<col width="14%" />
-			    <col width="14%" />
-			    <col width="14%" />
-			    <col width="14%" />
-			    <col width="14%" />
-			    <col width="14%" />
-			    <col width="14%" />
-			</colgroup>
-			<thead>
-				<tr>
-					<td style="color:red; background-color:#DCDCDC;">일</td>
-					<td style="background-color:#DCDCDC;">월</td>
-					<td style="background-color:#DCDCDC;">화</td>
-					<td style="background-color:#DCDCDC;">수</td>
-					<td style="background-color:#DCDCDC;">목</td>
-					<td style="background-color:#DCDCDC;">금</td>
-					<td style="background-color:#DCDCDC;">토</td>
-				</tr>
-			</thead>
-			<tbody>
-				 <tr>
-		         <c:forEach var="i" begin="1" end="${calendarMap.totalTd}">
-		            <c:set var="d" value="${i - calendarMap.beginBlank}"></c:set>
-		            <td>
-		               <c:if test="${d < 1 || d > calendarMap.lastDate}">
-		                  &nbsp;
-		               </c:if>
-		               <c:if test="${!(d < 1 || d > calendarMap.lastDate)}">
-		                  <a href="${pageContext.request.contextPath}/scheduleByDay?scheduleYear=${calendarMap.targetYear}&scheduleMonth=${calendarMap.targetMonth + 1}&scheduleDay=${d}">
-		                  	${d}
-		                  </a>
-		                         
-		               	  <div>
-							<c:forEach var="m" items="${list}">
-								<c:if test="${m.scheduleDay == d}">
-									<div>${m.cnt}개의 일정</div>
-								</c:if>
-							</c:forEach>	
-						  </div>
-		               
-
-		               </c:if>
-		               
-		               <!-- 한행에 7열씩.. -->
-		               <c:if test="${i < calendarMap.totalTd && i%7 == 0}">
-		                  </tr><tr>
-		               </c:if>
-		            </td>
-		         </c:forEach>
-		     	 </tr>
-			</tbody>
-	   </table>
    </div>
 </body>
 
 <script>
-
 	
+	// 페이지 로드 시 초기 달력 표시
+	updateCalendar();
+	
+	// 이전 달 버튼 클릭 시
+	$('#lastMonth').click(function(e) {
+	    updateCalendar(-1);
+	});
+	
+	// 다음 달 버튼 클릭 시
+	$('#nextMonth').click(function(e) {
+	    updateCalendar(1);
+	});
+	
+	// 달력 갱신 함수
+    function updateCalendar(monthOffset) {
+		
+    	let year = ${calendarMap.targetYear};
+        let month = $('#lastMonth').val();
+        
+        $.ajax({
+            url : '${pageContext.request.contextPath}/updateCalendar',
+            async : false,
+            method : 'GET',
+            data : {
+                targetYear: year,
+                targetMonth: month,
+                monthOffset: monthOffset
+            },
+            success : function(response) {
+                // 서버에서 받은 데이터로 달력 업데이트
+                $('#calendarContainer').html(response);
+                $('#lastMonth').val($('#lastMonth').val()-1);
+            }
+        });
+    }
 </script>
 </html>

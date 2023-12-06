@@ -81,18 +81,18 @@
 				method : 'get',
 				data : {memberId : memberId},
 				success : function(json) {
-						if(json == 1) {
-							alert('이미 사용중인 아이디입니다.');
-							$('#memberId').focus();
-						} else if(memberId.length < 5) {
-							alert('아이디를 5자 이상 입력하세요.');
-							$('#memberId').focus();
-						} else {
-							isIdCheck = true;
-							alert('사용 가능한 아이디입니다.');
-							$('#memberPw').focus();
-						}
-					},
+					if(json == 1) {
+						alert('이미 사용중인 아이디입니다.');
+						$('#memberId').focus();
+					} else if(memberId.length < 5) {
+						alert('아이디를 5자 이상 입력하세요.');
+						$('#memberId').focus();
+					} else {
+						isIdCheck = true;
+						alert('사용 가능한 아이디입니다.');
+						$('#memberPw').focus();
+					}
+				},
 				error : function(err) {
 					console.log(err);
 				}

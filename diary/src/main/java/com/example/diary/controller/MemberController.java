@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.diary.service.MemberService;
 import com.example.diary.vo.Member;
@@ -72,6 +73,17 @@ public class MemberController {
 		}
 		
 		return "member/addMember";
+	}
+	
+	@ResponseBody
+	@GetMapping("/idCheck")
+	public int idCheck(String memberId) {
+		
+		int result = memberService.idCheck(memberId);
+		
+		log.debug("아이디 중복 체크(중복o:1,중복x:0) : " + result);
+		
+		return result;
 	}
 	
 	// 회원가입(post)
