@@ -7,7 +7,9 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @Transactional
 public class CalendarService {
@@ -46,7 +48,7 @@ public class CalendarService {
 		resultMap.put("endBlank", endBlank);
 		resultMap.put("totalTd", totalTd);
 		
-		System.out.println(resultMap);
+		log.debug("달력 레이아웃 parameter : " + resultMap);
 		
 		return resultMap;
 	}

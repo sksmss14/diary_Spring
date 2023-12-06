@@ -10,46 +10,64 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.diary.mapper.ScheduleMapper;
 import com.example.diary.vo.Schedule;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @Transactional
 public class ScheduleService {
 	
-	@Autowired private ScheduleMapper scheduleMapper;
+	private ScheduleMapper scheduleMapper;
+	
+	// 생성자 주입(@Autowired 생략)
+	public ScheduleService(ScheduleMapper scheduleMapper) {
+		this.scheduleMapper = scheduleMapper;
+	}
 	
 	public List<Map<String, Object>> getScheduleListByMonth(Map<String, Object> paramMap) {
 		
 		List<Map<String, Object>> selectScheduleListByMonth = scheduleMapper.selectScheduleListByMonth(paramMap);
-		// 디버깅 코드
-		System.out.println("ScheduleService getScheduleListByMonth : " + selectScheduleListByMonth);
+		
+		log.debug("달력 데이터 목록 : " + selectScheduleListByMonth);
+		
 		return selectScheduleListByMonth;
 	}
 	
 	public List<Schedule> getScheduleByDay(Map<String, Object> paramMap) {
 		
 		List<Schedule> selectScheduleByDay = scheduleMapper.selectScheduleByDay(paramMap);
-		// 디버깅 코드
-		System.out.println("ScheduleService getScheduleListByDay : " + selectScheduleByDay);
+
+		log.debug("날짜별 일정 목록 : " + selectScheduleByDay);
+		
 		return selectScheduleByDay;
 	}
 	
-	public int addSchedule(Map<String, Object> paramMap) {
+	public int addSchedule(Map<String, Object> paramMap,
+							int scheduleYear, int scheduleMonth, int scheduleDay) {
+		
+		String scheduleDate = scheduleYear + "-" + scheduleMonth + "-" + scheduleDay;
+		paramMap.put("scheduleDate", scheduleDate);
+		
 		int result = scheduleMapper.addSchedule(paramMap);
-		// 디버깅 코드
-		System.out.println("ScheduleService 일정 추가(성공:1,실패:0) : " + result);
+
+		log.debug("일정 추가(성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 	
 	public int updateSchedule(Schedule paramSchedule) {
 		int result = scheduleMapper.updateSchedule(paramSchedule);
-		// 디버깅 코드
-		System.out.println("ScheduleService 일정 수정(성공:1,실패:0) : " + result);
+	
+		log.debug("일정 수정(성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 	
 	public int deleteSchedule(int scheduleNo) {
 		int result = scheduleMapper.deleteSchedule(scheduleNo);
-		// 디버깅 코드
-		System.out.println("ScheduleService 일정 삭제(성공:1,실패:0) : " + result);
+
+		log.debug("일정 삭제(성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 

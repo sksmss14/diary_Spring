@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,8 +35,8 @@
 	<div class="container" style="margin-top:40px; margin-bottom:70px">
 	   <h1>반갑습니다. ${loginMember.memberId}님</h1>
 	   <div style="margin-bottom : 10px;">
-			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth - 1}" class="btn btn-dark">이전 달</a>
-			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth + 1}" class="btn btn-dark">다음 달</a>
+			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth - 1}" class="btn btn-dark" id="lastMonth">이전 달</a>
+			<a href="${pageContext.request.contextPath}/home?targetYear=${calendarMap.targetYear}&targetMonth=${calendarMap.targetMonth + 1}" class="btn btn-dark" id="nextMonth">다음 달</a>
 		</div>
 		
 	   <h3 style="margin:20px 0 20px 0;">${calendarMap.targetYear}년 ${calendarMap.targetMonth + 1}월</h3>
@@ -81,7 +80,6 @@
 							<c:forEach var="m" items="${list}">
 								<c:if test="${m.scheduleDay == d}">
 									<div>${m.cnt}개의 일정</div>
-									<div>${m.memo}</div>
 								</c:if>
 							</c:forEach>	
 						  </div>
@@ -100,4 +98,9 @@
 	   </table>
    </div>
 </body>
+
+<script>
+
+	
+</script>
 </html>

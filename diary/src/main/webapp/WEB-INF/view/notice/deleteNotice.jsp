@@ -36,7 +36,7 @@
 			
 			<div class="mb-3 mt-3">
 				<label for="memberPw" class="form-label">비밀번호 입력</label>
-			    <input type="password" class="form-control" id="memberPw" placeholder="비밀번호" name="memberPw">
+			    <input type="password" class="form-control" id="memberPw" placeholder="비밀번호" name="memberPw" maxlength="15">
 			</div>
 			<button class="btn btn-dark">삭제하기</button>
 		</form>

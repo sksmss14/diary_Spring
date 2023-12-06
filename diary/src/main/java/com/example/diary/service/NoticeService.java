@@ -2,7 +2,6 @@ package com.example.diary.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,18 +9,25 @@ import com.example.diary.mapper.NoticeMapper;
 import com.example.diary.vo.Member;
 import com.example.diary.vo.Notice;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @Transactional
 public class NoticeService {
 	
-	@Autowired
 	private NoticeMapper noticeMapper;
+	
+	// 생성자 주입(@Autowired 생략)
+	public NoticeService(NoticeMapper noticeMapper) {
+		this.noticeMapper = noticeMapper;
+	}
 	
 	public List<Notice> selectNoticeList(Notice paramNotice) {
 		
 		List<Notice> noticeList = noticeMapper.selectNoticeList();
-		// 디버깅 코드
-		System.out.println("NoticeService selectNotice : " + noticeList.toString());
+
+		log.debug("공지 목록 : " + noticeList);
 		
 		return noticeList;
 	}
@@ -29,38 +35,45 @@ public class NoticeService {
 	public Notice selectNoticeOne(int noticeNo) {
 		
 		Notice selectNoticeOne = noticeMapper.selectNoticeOne(noticeNo);
-		// 디버깅 코드
-		System.out.println("NoticeService selectNoticeOne : " + selectNoticeOne.toString());
+
+		log.debug("공지 상세 : " + selectNoticeOne);
+		
 		return selectNoticeOne;
 	}
 
 	public int addNotice(Notice paramNotice) {
 		
 		int result = noticeMapper.addNotice(paramNotice);
-		// 디버깅 코드
-		System.out.println("NoticeService addNotice : " + result);
+
+		log.debug("공지 추가(성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 	
-	public String checkPassword(Member paramMember) {
+	public int checkPassword(Member paramMember) {
 		
-		String checkPassword = noticeMapper.checkPassword(paramMember);
-		// 디버깅 코드
-		System.out.println("NoticeService checkPassword : memberId= " + checkPassword);
+		int checkPassword = noticeMapper.checkPassword(paramMember);
+
+		log.debug("비밀번호 확인(성공:1,실패:0) : " + checkPassword);
+		
 		return checkPassword;
 	}
 	
 	public int updateNotice(Notice paramNotice) {
+		
 		int result = noticeMapper.updateNotice(paramNotice);
-		// 디버깅 코드
-		System.out.println("NoticeService updateNotice : " + result);
+
+		log.debug("공지 수정 (성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 	
 	public int deleteNotice(int noticeNo) {
+		
 		int result = noticeMapper.deleteNotice(noticeNo);
-		// 디버깅 코드
-		System.out.println("NoticeService deleteNotice(성공:1, 실패:0) : " + result);
+
+		log.debug("공지 삭제 (성공:1,실패:0) : " + result);
+		
 		return result;
 	}
 			

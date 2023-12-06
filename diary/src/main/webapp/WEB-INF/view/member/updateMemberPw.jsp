@@ -36,11 +36,11 @@
 		<form method="post" action="${pageContext.request.contextPath}/updateMemberPw">
 			<div class="mb-3 mt-3">
 				<label for="oldPw" class="form-label">원래 비밀번호</label>
-			    <input type="password" class="form-control" id="oldPw" name="oldPw">
+			    <input type="password" class="form-control" id="oldPw" name="oldPw" maxlength="15">
 			</div>
 			<div class="mb-3">
 				<label for="newPw" class="form-label">변경할 비밀번호</label>
-			    <input type="password" class="form-control" id="newPw" name="newPw">
+			    <input type="password" class="form-control" id="newPw" name="newPw" maxlength="15">
 			</div>
 			<button class="btn btn-dark">변경하기</button>
 		</form>

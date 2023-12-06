@@ -34,11 +34,11 @@
 		<form id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
 			<div class="mb-3 mt-3">
 			    <label for="memberId" class="form-label">아이디</label>
-			    <input type="text" class="form-control" id="memberId" name="memberId">
+			    <input type="text" class="form-control" id="memberId" name="memberId" maxlength="15">
 			</div>
 			<div class="mb-3">
 			    <label for="memberPw" class="form-label">비밀번호</label>
-			    <input type="password" class="form-control" id="memberPw" name="memberPw">
+			    <input type="password" class="form-control" id="memberPw" name="memberPw" maxlength="15">
 			</div>
 			<button id="loginBtn" class="btn btn-dark" style="margin-top:20px; margin-bottom:20px;">로그인</button>
 		</form>

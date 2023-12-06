@@ -13,13 +13,20 @@ import com.example.diary.service.MemberService;
 import com.example.diary.vo.Member;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class MemberController {
 	
-	@Autowired
 	private MemberService memberService;
 	
+	// 생성자 주입(@Autowired 생략)
+	public MemberController(MemberService memberService) {
+		this.memberService = memberService;
+	}
+	
+	// 로그인(get)
 	@GetMapping("/login")
 	public String login(HttpSession session) {
 		// 로그인이 되어 있다면 home 화면으로 redirect
@@ -30,6 +37,7 @@ public class MemberController {
 		return "member/loginMember";
 	}
 	
+	// 로그인(post)
 	@PostMapping("/login") 
 	public String login(HttpSession session, Member paramMember) { // 오버로딩 사용
 		
@@ -38,13 +46,14 @@ public class MemberController {
 		if(loginMember == null) {
 			return "redirect:/login";
 		}
+
+		log.debug("로그인 성공 : " + loginMember);
 		
-		System.out.println("MemberController login : " + loginMember.toString());
 		session.setAttribute("loginMember", loginMember);
-		System.out.println("로그인 성공 : " + loginMember.getMemberId());
 		return "redirect:/home";
 	}
 	
+	// 로그아웃
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		
@@ -52,7 +61,7 @@ public class MemberController {
 		return "redirect:/login";
 	}
 	
-	// 회원가입 폼
+	// 회원가입(get)
 	@GetMapping("/addMember")
 	public String addMember(HttpSession session) {
 		
@@ -65,7 +74,7 @@ public class MemberController {
 		return "member/addMember";
 	}
 	
-	// 회원가입 액션
+	// 회원가입(post)
 	@PostMapping("/addMember")
 	public String addMember(HttpSession session, Member member) {
 		
@@ -76,12 +85,13 @@ public class MemberController {
 		}
 		
 		int result = memberService.addMember(member);
-		System.out.println("MemberController addMember : " + result);
+		
+		log.debug("회원가입(성공:1,실패:0) : " + result);
 		
 		return "redirect:/login";
 	}
 	
-	// 비밀번호 변경 폼
+	// 비밀번호 변경(get)
 	@GetMapping("/updateMemberPw")
 	public String updateMemberPw(HttpSession session) {
 		
@@ -94,6 +104,7 @@ public class MemberController {
 		return "member/updateMemberPw";
 	}
 	
+	// 비밀번호 변경(post)
 	@PostMapping("/updateMemberPw")
 	public String updateMemberPw(HttpSession session, String oldPw, String newPw) {
 		
@@ -111,7 +122,9 @@ public class MemberController {
 		paramMap.put("newPw", newPw);
 		
 		int result = memberService.updateMemberPw(paramMap);
-		System.out.println("MemberController updateMemberPw(성공:1,실패:0) : " + result);
+		
+		log.debug("회원 비밀번호 변경(성공:1,실패:0) : " + result);
+		
 		if(result != 1) {
 			return "redirect:/home";
 		}
@@ -120,6 +133,7 @@ public class MemberController {
 		return "redirect:/login";
 	}
 	
+	// 회원탈퇴(get)
 	@GetMapping("/deleteMember")
 	public String deleteMember(HttpSession session) {
 		
@@ -132,6 +146,7 @@ public class MemberController {
 		return "member/deleteMember";
 	}
 	
+	// 회원탈퇴(post)
 	@PostMapping("/deleteMember")
 	public String deleteMember(HttpSession session, String memberPw) {
 		
@@ -149,7 +164,9 @@ public class MemberController {
 		paramMap.put("memberPw", memberPw);
 		
 		int result = memberService.deleteMember(paramMap);
-		System.out.println("MemberController deleteMember(성공:1,실패:0) : " + result);
+		
+		log.debug("회원탈퇴(성공:1,실패:0) : " + result);
+		
 		if(result != 1) {
 			return "redirect:/home";
 		}

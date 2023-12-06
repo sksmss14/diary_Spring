@@ -15,7 +15,7 @@ public interface NoticeMapper {
 	
 	int addNotice(Notice notice);
 	
-	String checkPassword(Member member); // 비밀번호 확인이 성공하면 memberId를 반환한다.
+	int checkPassword(Member member); 
 	int updateNotice(Notice notice);
 	int deleteNotice(int noticeNo);
 	

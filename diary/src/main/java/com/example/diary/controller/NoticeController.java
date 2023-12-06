@@ -1,8 +1,6 @@
 package com.example.diary.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,20 +15,26 @@ import com.example.diary.vo.Member;
 import com.example.diary.vo.Notice;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class NoticeController {
 	
-	@Autowired
 	private NoticeService noticeService;
-	@Autowired
 	private CommentService commentService;
+	
+	// 생성자 주입(@Autowired 생략)
+	public NoticeController(NoticeService noticeService, CommentService commentService) {
+		this.noticeService = noticeService;
+		this.commentService = commentService;
+	}
 	
 	@GetMapping("/notice")
 	public String notice(Notice paramNotice, HttpSession session, Model model) {
 		
 		List<Notice> noticeList = noticeService.selectNoticeList(paramNotice);
-		System.out.println("NoticeController selectNoticeList : " + noticeList.toString());
+		log.debug("공지 목록 : " + noticeList);
 		
 		String memberId = null;
 		if(session.getAttribute("loginMember") != null) {
@@ -44,7 +48,6 @@ public class NoticeController {
 		return "notice/noticeList";
 	
 	}
-	
 	
 	@GetMapping("/addNotice")
 	public String addNotice(HttpSession session) {
@@ -83,7 +86,8 @@ public class NoticeController {
 		
 		paramNotice.setMemberId(loginMember.getMemberId());
 		int result = noticeService.addNotice(paramNotice);
-		System.out.println("NoticeController addNotice : " + result);
+		
+		log.debug("공지 추가(성공:1,실패:0) : " + result);
 		
 		return "redirect:/notice";
 	}
@@ -101,8 +105,8 @@ public class NoticeController {
 		int commentCount = commentService.getCommentCount(noticeNo);
 		
 		List<Comment> commentList = commentService.selectCommentList(noticeNo);
-		// 디버깅 코드
-		System.out.println("NoticeController commentList : " + commentList);
+
+		log.debug("댓글 목록 : " + commentList);
 		
 		model.addAttribute("noticeOne", noticeOne);
 		model.addAttribute("commentList", commentList);
@@ -155,12 +159,14 @@ public class NoticeController {
 		loginMember.setMemberPw(password);
 		
 		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
-		String checkPassword = noticeService.checkPassword(loginMember);
-		if(checkPassword == null) { 
+		int checkPassword = noticeService.checkPassword(loginMember);
+		if(checkPassword == 0) { 
 			return "redirect:/notice";
 		}
 		// 수정(비밀번호 확인 완료 후 작업)
 		int result = noticeService.updateNotice(paramNotice);
+		
+		log.debug("공지 수정(성공:1,실패:0)" + result);
 		
 		return "redirect:/noticeOne?noticeNo=" + paramNotice.getNoticeNo();
 	}
@@ -205,20 +211,20 @@ public class NoticeController {
 		// Member 객체에 입력한 비밀번호 추가
 		loginMember.setMemberPw(memberPw);
 		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
-		String checkPassword = noticeService.checkPassword(loginMember);
-		if(checkPassword == null) {
+		int checkPassword = noticeService.checkPassword(loginMember);
+		if(checkPassword == 0) {
 			return "redirect:/notice";
 		}
 				
 		// 삭제하려는 공지의 모든 댓글 삭제(비밀번호 확인 완료 후 작업)
 		int deleteCommentCnt = commentService.deleteAllComments(noticeNo);
-		// 디버깅 코드
-		System.out.println("NoticeController 삭제된 댓글 개수 : " + deleteCommentCnt);
+		
+		log.debug("삭제된 댓글 개수 : " + deleteCommentCnt);
 		
 		// 공지 삭제(비밀번호 확인 완료 후 작업)
 		int result = noticeService.deleteNotice(noticeNo);
-		// 디버깅 코드
-		System.out.println("NoticeController deleteNotice(성공:1, 실패:0) : " + result);
+		
+		log.debug("공지 삭제(성공:1,실패:0) : " + result);
 				
 		return "redirect:/notice";
 	}

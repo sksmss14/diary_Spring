@@ -76,7 +76,7 @@
 			<input type="hidden" name="scheduleDay" value="${scheduleDay}">
 			<div class="row">
 				<div class="col-md-2">
-					<select class="form-select" name="scheduleEmoji" id="scheduleEmoji">
+					<select class="form-select" name="scheduleEmoji" id="scheduleEmoji" style="width:120px;">
 					  <option value="0" selected>감정 선택</option>
 					  <option value="1">&#128512;</option> <!-- happy -->
 					  <option value="2">&#128545;</option> <!-- angry -->

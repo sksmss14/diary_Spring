@@ -11,70 +11,85 @@ import com.example.diary.mapper.CommentMapper;
 import com.example.diary.vo.Comment;
 import com.example.diary.vo.Member;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @Transactional
 public class CommentService {
 	
-	@Autowired
-	CommentMapper commentMapper;
+	private CommentMapper commentMapper;
+	
+	// 생성자 주입(@Autowired 생략)
+	public CommentService(CommentMapper commentMapper) {
+		this.commentMapper = commentMapper;
+	}
 	
 	public int getCommentCount(int noticeNo) {
 		
 		int result = commentMapper.getCommentCount(noticeNo);
-		// 디버깅
-		System.out.println("CommentService getCommentCount : " + result);
+		
+		log.debug("댓글 개수 : " + result);
+		
 		return result;
 	}
 	
 	public List<Comment> selectCommentList(int noticeNo) {
 		
 		List<Comment> selectCommentList= commentMapper.selectCommentList(noticeNo);
-		// 디버깅
-		System.out.println("CommentService selectCommentList : " + selectCommentList);
+		
+		log.debug("댓글 목록 : " + selectCommentList);
+		
 		return selectCommentList;	
 	}
 	
 	public Comment selectCommentOne(int commentNo) {
 		
 		Comment selectCommentOne = commentMapper.selectCommentOne(commentNo);
-		// 디버깅
-		System.out.println("CommentService selectCommentOne : " + selectCommentOne);
+	
+		log.debug("수정 전 댓글 : " + selectCommentOne);
+		
 		return selectCommentOne;
 	}
 	
 	public int addComment(Comment comment) {
 		int result = commentMapper.addComment(comment);
-		// 디버깅 코드
-		System.out.println("commentService 댓글 추가(성공:1, 실패:0) : " + result);
+		
+		log.debug("댓글 추가(성공:1, 실패:0) : " + result);
+		
 		return result;
 	}
 	
-	public String checkPassword(Member paramMember) {
+	public int checkPassword(Member paramMember) {
 		
-		String checkPassword = commentMapper.checkPassword(paramMember);
-		// 디버깅 코드
-		System.out.println("CommentService checkPassword : memberId= " + checkPassword);
+		int checkPassword = commentMapper.checkPassword(paramMember);
+		
+		log.debug("비밀번호 확인(성공:1,실패:0) : " + checkPassword);
+
 		return checkPassword;
 	}
 	
 	public int updateComment(Comment comment) {
 		int result = commentMapper.updateComment(comment);
-		// 디버깅 코드
-		System.out.println("commentService 댓글 수정(성공:1, 실패:0) : " + result);
+
+		log.debug("댓글 수정(성공:1, 실패:0) : " + result);
+		
 		return result;
 	}
 	
 	public int deleteAllComments(int noticeNo) {
 		int deleteCommentCnt = commentMapper.deleteAllComments(noticeNo);
-		// 디버깅 코드
-		System.out.println("commentService 삭제된 댓글 개수 : " + deleteCommentCnt);
+	
+		log.debug("삭제된 댓글 개수 : " + deleteCommentCnt);
+		
 		return deleteCommentCnt;
 	}
 	
 	public int deleteComment(int commentNo) {
 		int result = commentMapper.deleteComment(commentNo);
-		// 디버깅 코드
-		System.out.println("commentService 댓글 삭제(성공:1, 실패:0) : " + result);
+
+		log.debug("댓글 삭제(성공:1, 실패:0) : " + result);
+		
 		return result;
 	}
 }

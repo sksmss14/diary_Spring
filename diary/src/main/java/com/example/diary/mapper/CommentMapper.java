@@ -18,7 +18,7 @@ public interface CommentMapper {
 		
 	int addComment(Comment comment);
 	
-	String checkPassword(Member member);
+	int checkPassword(Member member);
 	int updateComment(Comment comment);
 	
 	int deleteAllComments(int noticeNo);

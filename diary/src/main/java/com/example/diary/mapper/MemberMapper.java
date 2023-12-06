@@ -10,6 +10,7 @@ import com.example.diary.vo.Member;
 public interface MemberMapper {
 	
 	// 로그인
+	int idCheck(String memberId);
 	Member login(Member member);
 	
 	// 회원가입

@@ -19,8 +19,12 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class ScheduleController {
 	
-	@Autowired
-	ScheduleService scheduleService;
+	private ScheduleService scheduleService;
+	
+	// 생성자 주입(@Autowired 생략)
+	public ScheduleController(ScheduleService scheduleService) {
+		this.scheduleService = scheduleService;
+	}
 	
 	@GetMapping("/scheduleByDay")
 	public String scheduleByDay(HttpSession session, Model model,
@@ -62,14 +66,11 @@ public class ScheduleController {
 		}
 		Member loginMember = (Member) session.getAttribute("loginMember");
 		
-		String scheduleDate = scheduleYear + "-" + scheduleMonth + "-" + scheduleDay;
-		
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("memberId", loginMember.getMemberId());
-		paramMap.put("scheduleDate", scheduleDate);
+		paramMap.put("memberId", loginMember.getMemberId());		
 		paramMap.put("scheduleMemo", scheduleMemo);
 		paramMap.put("scheduleEmoji", scheduleEmoji);
-		int result = scheduleService.addSchedule(paramMap);
+		int result = scheduleService.addSchedule(paramMap, scheduleYear, scheduleMonth, scheduleDay);
 			
 		return "redirect:/scheduleByDay?scheduleYear=" + scheduleYear + "&scheduleMonth=" + scheduleMonth + "&scheduleDay=" + scheduleDay;
 		

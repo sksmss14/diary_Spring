@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
+	<title>댓글 삭제</title>
 	<!-- jQuery -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<!-- 부트스트랩 CDN -->
@@ -38,7 +38,7 @@
 			
 			<div class="mb-3 mt-3">
 				<label for="memberPw" class="form-label">비밀번호 입력</label>
-			    <input type="password" class="form-control" id="password" placeholder="비밀번호" name="password">
+			    <input type="password" class="form-control" id="memberPw" placeholder="비밀번호" name="memberPw" maxlength="15">
 			</div>
 			<button class="btn btn-dark">삭제하기</button>
 		</form>

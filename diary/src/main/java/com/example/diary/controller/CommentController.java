@@ -1,25 +1,28 @@
 package com.example.diary.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.diary.vo.Member;
 import com.example.diary.service.CommentService;
 import com.example.diary.vo.Comment;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Controller
 public class CommentController {
 	
-	@Autowired
-	CommentService commentService;
+	private CommentService commentService;
+	
+	// 생성자 주입(@Autowired 생략)
+	public CommentController(CommentService commentService) {
+		this.commentService = commentService;
+	}
 	
 	@PostMapping("/addComment")
 	public String addComment(HttpSession session, int noticeNo, String comment, String isSecret) {
@@ -43,8 +46,8 @@ public class CommentController {
 		c.setIsSecret(isSecret);
 				
 		int result = commentService.addComment(c);
-		// 디버깅 코드
-		System.out.println("CommentController addComment(성공:1, 실패:0) : " + result);
+
+		log.debug("댓글 추가(성공:1,실패:0)" + result);
 		
 		return "redirect:/noticeOne?noticeNo="+noticeNo;
 	}
@@ -73,8 +76,8 @@ public class CommentController {
 	@PostMapping("/updateComment")
 	public String updateComment(HttpSession session, 
 									int commentNo, String comment, 
-									String isSecret, String password, 
-									int noticeNo) {
+									@RequestParam(defaultValue = "false") String isSecret, 
+									String password, int noticeNo) {
 		
 		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
 		if(session.getAttribute("loginMember") == null) {
@@ -86,21 +89,19 @@ public class CommentController {
 		loginMember.setMemberPw(password);
 		
 		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
-		String checkPassword = commentService.checkPassword(loginMember);
-		if(checkPassword == null) { 
+		int checkPassword = commentService.checkPassword(loginMember);
+		if(checkPassword == 0) { 
 			return "redirect:/notice";
 		}
 		// 수정(비밀번호 확인 완료 후 작업)
 		Comment paramComment = new Comment();
 		paramComment.setCommentNo(commentNo);
 		paramComment.setComment(comment);
-		if(isSecret == null) {
-			paramComment.setIsSecret("false");
-		} else {
-			paramComment.setIsSecret(isSecret);
-		}
+		paramComment.setIsSecret(isSecret);
 		
 		int result = commentService.updateComment(paramComment);
+		
+		log.debug("댓글 수정(성공:1,실패:0) : " + result);
 		
 		return "redirect:/noticeOne?noticeNo=" + noticeNo;
 	}
@@ -128,7 +129,7 @@ public class CommentController {
 	
 	@PostMapping("/deleteComment")
 	public String deleteComment(HttpSession session, 
-								int commentNo, String password, int noticeNo) {
+								int commentNo, String memberPw, int noticeNo) {
 		
 		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
 		if(session.getAttribute("loginMember") == null) {
@@ -137,15 +138,17 @@ public class CommentController {
 		
 		Member loginMember = (Member) session.getAttribute("loginMember");
 		// Member 객체에 입력한 비밀번호 추가
-		loginMember.setMemberPw(password);
+		loginMember.setMemberPw(memberPw);
 		
 		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
-		String checkPassword = commentService.checkPassword(loginMember);
-		if(checkPassword == null) { 
+		int checkPassword = commentService.checkPassword(loginMember);
+		if(checkPassword == 0) { 
 			return "redirect:/notice";
 		}
 		// 삭제(비밀번호 확인 완료 후 작업)
 		int result = commentService.deleteComment(commentNo);
+		
+		log.debug("댓글 삭제(성공:1,실패:0) : " + result);
 		
 		return "redirect:/noticeOne?noticeNo=" + noticeNo;
 	}

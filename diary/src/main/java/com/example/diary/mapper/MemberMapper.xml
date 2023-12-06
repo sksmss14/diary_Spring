@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.diary.mapper.MemberMapper">
 
+	<select id="idCheck" parameterType="String" resultType="int">
+		SELECT COUNT(*)
+		FROM member
+		WHERE member_id = #{memberId}
+	</select>
+
 	<select id="login" parameterType="com.example.diary.vo.Member" 
 						resultType="com.example.diary.vo.Member">
 		SELECT
