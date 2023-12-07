@@ -63,9 +63,7 @@ public class HomeController {
 	public String lastCalendar(HttpSession session, Model model,
 								Integer targetYear, Integer targetMonth, 
 								@RequestParam(defaultValue = "0") int monthOffset) {
-		
-		targetMonth += monthOffset;
-		
+				
 		Map<String, Object> calendarMap = calendarService.getCalendar(targetYear, targetMonth);
 		model.addAttribute("calendarMap", calendarMap);
 		

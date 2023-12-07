@@ -52,12 +52,12 @@
 	updateCalendar();
 	
 	// 이전 달 버튼 클릭 시
-	$('#lastMonth').click(function(e) {
+	$('#lastMonth').click(function() {
 	    updateCalendar(-1);
 	});
 	
 	// 다음 달 버튼 클릭 시
-	$('#nextMonth').click(function(e) {
+	$('#nextMonth').click(function() {
 	    updateCalendar(1);
 	});
 	
@@ -69,7 +69,6 @@
         
         $.ajax({
             url : '${pageContext.request.contextPath}/updateCalendar',
-            async : false,
             method : 'GET',
             data : {
                 targetYear: year,
