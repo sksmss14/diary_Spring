@@ -61,15 +61,17 @@ public class HomeController {
 		
 	@GetMapping("/updateCalendar")
 	public String lastCalendar(HttpSession session, Model model,
-								Integer targetYear, Integer targetMonth, 
-								@RequestParam(defaultValue = "0") int monthOffset) {
+								Integer targetYear, Integer targetMonth) {		
+		// 로그인 후에만 접근 가능
+		if(session.getAttribute("loginMember") == null) {
+			return "redirect:/login";
+		}
+		Member loginMember = (Member) session.getAttribute("loginMember");
 				
 		Map<String, Object> calendarMap = calendarService.getCalendar(targetYear, targetMonth);
 		model.addAttribute("calendarMap", calendarMap);
 		
 		log.debug("달력 레이아웃 parameter : " + calendarMap);
-		
-		Member loginMember = (Member) session.getAttribute("loginMember");
 		
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("memberId", loginMember.getMemberId());

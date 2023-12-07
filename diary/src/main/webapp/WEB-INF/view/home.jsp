@@ -66,6 +66,12 @@
 	// 달력 갱신 함수
     function updateCalendar(monthOffset) {
 		
+    	if(monthOffset == 1) {
+       		$('#targetMonth').val( Number($('#targetMonth').val()) + 1);
+       	} else if(monthOffset == -1) {
+       		$('#targetMonth').val( Number($('#targetMonth').val()) - 1);
+       	}
+		
     	let year = $('#targetYear').val();
         let month = $('#targetMonth').val();
         
@@ -74,19 +80,13 @@
             method : 'GET',
             data : {
                 targetYear: year,
-                targetMonth: month,
+                targetMonth: month
             },
             success : function(response) {
                 // 서버에서 받은 데이터로 달력 업데이트
                 $('#calendarContainer').html(response);
                 console.log($('#targetYear').val() + '년 ' + $('#targetMonth').val() + '월');
-                
-               	if(monthOffset == 1) {
-               		$('#targetMonth').val( Number($('#targetMonth').val()) + 1);
-               	} else if(monthOffset == -1) {
-               		$('#targetMonth').val( Number($('#targetMonth').val()) - 1);
-               	}
-                
+                 
                 if($('#targetMonth').val() == -1) {
                 	$('#targetMonth').val(11);
                 	$('#targetYear').val( Number($('#targetYear').val()) - 1);
