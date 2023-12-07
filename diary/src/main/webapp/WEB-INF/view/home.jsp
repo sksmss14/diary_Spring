@@ -37,7 +37,9 @@
 	<div class="container" style="margin-top:40px; margin-bottom:70px">
 	   <h1>반갑습니다. ${loginMember.memberId}님</h1>
 	   <div style="margin-bottom : 10px;">
-			<button type="button" class="btn btn-dark" id="lastMonth" value="${calendarMap.targetMonth}">이전 달</button>
+	   		<input type="hidden" value="${calendarMap.targetYear}" id="targetYear">
+	   		<input type="hidden" value="${calendarMap.targetMonth}" id="targetMonth">
+			<button type="button" class="btn btn-dark" id="lastMonth">이전 달</button>
 			<button type="button" class="btn btn-dark" id="nextMonth">다음 달</button>
 		</div>
 		
@@ -64,8 +66,8 @@
 	// 달력 갱신 함수
     function updateCalendar(monthOffset) {
 		
-    	let year = ${calendarMap.targetYear};
-        let month = $('#lastMonth').val();
+    	let year = $('#targetYear').val();
+        let month = $('#targetMonth').val();
         
         $.ajax({
             url : '${pageContext.request.contextPath}/updateCalendar',
@@ -73,13 +75,19 @@
             data : {
                 targetYear: year,
                 targetMonth: month,
-                monthOffset: monthOffset
             },
             success : function(response) {
                 // 서버에서 받은 데이터로 달력 업데이트
                 $('#calendarContainer').html(response);
-                $('#lastMonth').val($('#lastMonth').val()-1);
-            }
+                console.log($('#targetYear').val());
+                console.log($('#targetMonth').val());
+                
+                $('#targetMonth').val($('#targetMonth').val()-1);
+                if($('#targetMonth').val() == -1) {
+                	$('#targetMonth').val(11);
+                	$('#targetYear').val($('#targetYear').val()-1);
+                }
+             }
         });
     }
 </script>

@@ -25,8 +25,8 @@ public class CalendarService {
 			firstDay.set(Calendar.MONTH, targetMonth);
 		}
 		// 1월에서 -1, 12월 +1 이 되면 CalendarAPI에서 자동으로 년과 월이 변경된다
-		targetYear = firstDay.get(Calendar.YEAR);
-		targetMonth = firstDay.get(Calendar.MONTH);
+		targetYear = firstDay.get(Calendar.YEAR); // 2023
+		targetMonth = firstDay.get(Calendar.MONTH); // 11(12월이므로)
 		
 		// firstDate는 1일, lastDate는 API를 통해서 구한다
 		int lastDate = firstDay.getActualMaximum(Calendar.DATE);
