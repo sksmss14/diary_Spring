@@ -81,7 +81,11 @@
                 $('#calendarContainer').html(response);
                 console.log($('#targetYear').val() + '년 ' + $('#targetMonth').val() + '월');
                 
-                $('#targetMonth').val( Number($('#targetMonth').val()) + 1);
+               	if(monthOffset == 1) {
+               		$('#targetMonth').val( Number($('#targetMonth').val()) + 1);
+               	} else if(monthOffset == -1) {
+               		$('#targetMonth').val( Number($('#targetMonth').val()) - 1);
+               	}
                 
                 if($('#targetMonth').val() == -1) {
                 	$('#targetMonth').val(11);
