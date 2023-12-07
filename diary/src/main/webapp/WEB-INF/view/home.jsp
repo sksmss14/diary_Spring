@@ -79,13 +79,17 @@
             success : function(response) {
                 // 서버에서 받은 데이터로 달력 업데이트
                 $('#calendarContainer').html(response);
-                console.log($('#targetYear').val());
-                console.log($('#targetMonth').val());
+                console.log($('#targetYear').val() + '년 ' + $('#targetMonth').val() + '월');
                 
-                $('#targetMonth').val($('#targetMonth').val()-1);
+                $('#targetMonth').val( Number($('#targetMonth').val()) + 1);
+                
                 if($('#targetMonth').val() == -1) {
                 	$('#targetMonth').val(11);
-                	$('#targetYear').val($('#targetYear').val()-1);
+                	$('#targetYear').val( Number($('#targetYear').val()) - 1);
+                }
+                if($('#targetMonth').val() == 12) {
+                	$('#targetMonth').val(0);
+                	$('#targetYear').val( Number($('#targetYear').val()) + 1);
                 }
              }
         });
