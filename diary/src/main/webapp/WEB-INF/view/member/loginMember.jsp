@@ -48,8 +48,6 @@
 
 <script>
 	$('#memberId').focus();
-	
-	
 </script>
 
 </html>

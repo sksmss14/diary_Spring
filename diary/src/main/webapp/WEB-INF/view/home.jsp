@@ -138,6 +138,7 @@
                 targetMonth: month
             },
             success : function(response) {
+            
                 // 서버에서 받은 데이터로 달력 업데이트
                 $('#calendarContainer').html(response);
                               
@@ -153,7 +154,7 @@
                 console.log($('#targetYear').val() + '년 ' + $('#targetMonth').val() + '월');
              },
              error : function(error) { 
-            	// 로그아웃된 상태에서 버튼 클릭시 /changeCalendar에서 NullPointerException이 발생하여 ajax 실행x
+            	// 로그아웃된 상태에서 버튼 클릭시 changeCalendar 메서드에서 null을 반환하여 ajax 실행x -> error 발생
             	alert('로그아웃 상태입니다. 로그인 페이지로 이동합니다.');
          		location.href = '${pageContext.request.contextPath}/login';
              }

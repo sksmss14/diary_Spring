@@ -71,8 +71,8 @@ public class HomeController {
 		try {
 			paramMap.put("memberId", loginMember.getMemberId()); 
 		} catch(NullPointerException e) {
-			log.error("로그아웃시 NullPointerException 발생 -> ajax error 코드 실행");
-			throw e;
+			log.error("로그아웃시 NullPointerException 발생 -> null을 반환하면 ajax error 코드 실행");
+			return null;
 		}
 		
 		paramMap.put("year", calendarMap.get("targetYear"));
