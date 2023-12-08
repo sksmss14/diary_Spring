@@ -5,7 +5,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Insert title here</title>
+	<title>공지 목록</title>
 	
 	<!-- 부트스트랩 CDN -->
 	<!-- Latest compiled and minified CSS -->
