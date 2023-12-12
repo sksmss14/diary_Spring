@@ -24,8 +24,8 @@ public class MemberService {
 		this.memberMapper = memberMapper;
 	}
 	
-	// 아이디 중복 체크
 	public int idCheck(String memberId) {
+		
 		int result = memberMapper.idCheck(memberId);
 		
 		log.debug("아이디 중복 체크(중복o:1,중복x:0) : " + result);
@@ -33,17 +33,15 @@ public class MemberService {
 		return result;
 	}
 	
-	// 로그인
 	public Member login(Member paramMember) {
 		
 		Member resultMember = memberMapper.login(paramMember);
 		
-		log.debug("로그인 성공 : " + resultMember);
+		log.debug("로그인 성공 여부 확인(실패:null) : " + resultMember);
 
 		return resultMember;
 	}
 	
-	// 회원가입
 	public int addMember(Member paramMember) {
 		
 		int result = memberMapper.insertMember(paramMember);
@@ -53,8 +51,8 @@ public class MemberService {
 		return result;
 	}
 	
-	// 비밀번호 변경
 	public int updateMemberPw(Map<String, Object> paramMap) {
+		
 		int result = memberMapper.updateMemberPw(paramMap);
 		
 		log.debug("회원 비밀번호 변경(성공:1,실패:0) : " + result);
@@ -62,7 +60,6 @@ public class MemberService {
 		return result;
 	}
 	
-	// 회원탈퇴
 	public int deleteMember(Map<String, Object> paramMap) {
 		
 		int result = memberMapper.deleteMember(paramMap);
@@ -71,5 +68,5 @@ public class MemberService {
 		
 		return result;
 	}
-
+	
 }

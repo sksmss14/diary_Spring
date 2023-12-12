@@ -18,10 +18,10 @@
 	<!-- 폰트 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap" rel="stylesheet">
 	<style>
 		#font {
-			font-family: 'Song Myung', serif;
+			font-family: 'IBM Plex Sans KR', sans-serif;
 		}
 	</style>
 </head>
@@ -41,7 +41,7 @@
 			
 			<div class="mb-3 mt-3">
 				<label for="scheduleMemo" class="form-label">내용</label>
-				<textarea name="scheduleMemo" id="scheduleMemo" class="form-control" rows="5" style="resize:none; margin-bottom:10px;" maxlength="300">${scheduleMemo}</textarea>			
+				<textarea name="scheduleMemo" id="scheduleMemo" class="form-control" rows="5" style="resize:none; margin-bottom:10px;" maxlength="300" placeholder="입력하기">${scheduleMemo}</textarea>			
 			</div>
 			<div class="d-flex">
 	
@@ -89,7 +89,11 @@
 		if($('#scheduleEmoji').val() == 0) {
 			alert('감정을 선택하세요.');
 			return;
-		}	
+		} else if($('#scheduleMemo').val() == 0) {
+			alert('일정을 입력하세요.');
+			$('#scheduleMemo').focus();
+			return;
+		}
 		$('#updateForm').submit();
 	});
 </script>

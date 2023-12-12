@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.diary.vo.Member;
 import com.example.diary.service.CommentService;
@@ -24,12 +25,13 @@ public class CommentController {
 		this.commentService = commentService;
 	}
 	
+	@ResponseBody
 	@PostMapping("/addComment")
 	public String addComment(HttpSession session, int noticeNo, String comment, String isSecret) {
 						
 		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
 		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/login";
+			return "notLogin"; 
 		}
 		
 		Member loginMember = (Member) session.getAttribute("loginMember");
@@ -46,26 +48,38 @@ public class CommentController {
 		c.setIsSecret(isSecret);
 				
 		int result = commentService.addComment(c);
-
+		
 		log.debug("댓글 추가(성공:1,실패:0)" + result);
 		
-		return "redirect:/noticeOne?noticeNo="+noticeNo;
+		if(result != 1) {
+			return "fail";
+		}
+		return "success";    //"redirect:/noticeOne?noticeNo="+noticeNo;
+	}
+	
+	@ResponseBody
+	@GetMapping("/commentBtnCheck")
+	public String updateCommentBtnCheck(HttpSession session, String memberId) {
+		
+		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
+		if(session.getAttribute("loginMember") == null) {
+			return "notLogin";
+		}
+		
+		Member loginMember = (Member) session.getAttribute("loginMember");
+		// 본인이 작성한 댓글이 아니고 일반회원일 때 noticeOne으로 redirect
+		if(!loginMember.getMemberId().equals(memberId) && loginMember.getMemberLevel() == 0) {
+			return "notMyComment";
+		}
+		
+		// 성공 : 해당 댓글을 작성한 회원 + 관리자
+		return "success";
 	}
 	
 	@GetMapping("/updateComment")
 	public String updateComment(HttpSession session, Model model,
-									int commentNo, int noticeNo, String memberId) {
+									int commentNo) {
 		
-		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
-		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/login";
-		}
-		
-		Member loginMember = (Member) session.getAttribute("loginMember");
-		// 본인이 작성한 댓글이 아니면 noticeOne으로 redirect
-		if(!loginMember.getMemberId().equals(memberId)) {
-			return "redirect:/noticeOne?noticeNo=" + noticeNo;
-		}
 		Comment commentOne = commentService.selectCommentOne(commentNo);
 		
 		model.addAttribute("commentOne", commentOne);
@@ -73,25 +87,31 @@ public class CommentController {
 		return "comment/updateComment";
 	}
 	
+	@ResponseBody
 	@PostMapping("/updateComment")
 	public String updateComment(HttpSession session, 
-									int commentNo, String comment, 
+									int commentNo, String comment, String memberId,
 									@RequestParam(defaultValue = "false") String isSecret, 
-									String password, int noticeNo) {
+									String memberPw) {
 		
 		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
 		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/login";
+			return "notLogin";
 		}
 		
 		Member loginMember = (Member) session.getAttribute("loginMember");
-		// Member 객체에 입력한 비밀번호 추가
-		loginMember.setMemberPw(password);
+		// 해당 댓글을 작성하지 않은 일반 회원(관리자x)일 때 noticeOne으로 redirect
+		if(!loginMember.getMemberId().equals(memberId) && loginMember.getMemberLevel() == 0) {
+			return "notMyComment";
+		}
 		
-		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
+		// Member 객체에 입력한 비밀번호 추가
+		loginMember.setMemberPw(memberPw);
+		
+		// 비밀번호 확인
 		int checkPassword = commentService.checkPassword(loginMember);
 		if(checkPassword == 0) { 
-			return "redirect:/notice";
+			return "failCheckPassword";
 		}
 		// 수정(비밀번호 확인 완료 후 작업)
 		Comment paramComment = new Comment();
@@ -103,54 +123,56 @@ public class CommentController {
 		
 		log.debug("댓글 수정(성공:1,실패:0) : " + result);
 		
-		return "redirect:/noticeOne?noticeNo=" + noticeNo;
+		if(result != 1) {
+			return "fail";
+		}
+		return "success";
 	}
 	
 	@GetMapping("/deleteComment")
 	public String deleteComment(HttpSession session, Model model,
-								int commentNo, int noticeNo, String memberId) {
-		
-		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
-		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/login";
-		}
-		
-		Member loginMember = (Member) session.getAttribute("loginMember");
-		// 본인이 작성한 댓글이 아니면 noticeOne으로 redirect
-		if(!loginMember.getMemberId().equals(memberId)) {
-			return "redirect:/noticeOne?noticeNo=" + noticeNo;
-		}
-			
+								int commentNo, String memberId, int noticeNo) { // noticeNo의 defaultValue = null
+				
 		model.addAttribute("commentNo", commentNo);
+		model.addAttribute("memberId", memberId);
 		model.addAttribute("noticeNo", noticeNo);
 			
 		return "comment/deleteComment";
 	}
 	
+	@ResponseBody
 	@PostMapping("/deleteComment")
 	public String deleteComment(HttpSession session, 
-								int commentNo, String memberPw, int noticeNo) {
+								int commentNo, String memberPw, String memberId) {
 		
 		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
 		if(session.getAttribute("loginMember") == null) {
-			return "redirect:/login";
+			return "notLogin";
 		}
 		
 		Member loginMember = (Member) session.getAttribute("loginMember");
+		// 해당 댓글을 작성하지 않은 일반 회원(관리자x)일 때 noticeOne으로 redirect
+		if(!loginMember.getMemberId().equals(memberId) && loginMember.getMemberLevel() == 0) {
+			return "notMyComment";
+		}
+		
 		// Member 객체에 입력한 비밀번호 추가
 		loginMember.setMemberPw(memberPw);
 		
-		// 비밀번호 확인(비밀번호가 틀렸다면 공지 화면으로 redirect)
+		// 비밀번호 확인
 		int checkPassword = commentService.checkPassword(loginMember);
 		if(checkPassword == 0) { 
-			return "redirect:/notice";
+			return "failCheckPassword";
 		}
 		// 삭제(비밀번호 확인 완료 후 작업)
 		int result = commentService.deleteComment(commentNo);
 		
 		log.debug("댓글 삭제(성공:1,실패:0) : " + result);
 		
-		return "redirect:/noticeOne?noticeNo=" + noticeNo;
+		if(result != 1) {
+			return "fail";
+		}	
+		return "success";
 	}
 	
 }

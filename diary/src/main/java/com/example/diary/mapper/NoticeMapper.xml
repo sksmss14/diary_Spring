@@ -12,13 +12,14 @@
 	
 	<select id="selectNoticeOne" parameterType="int" resultType="com.example.diary.vo.Notice">
 		SELECT 
-			notice_no noticeNo, 
+			notice_no noticeNo,
+			member_id memberId,
 			notice_title noticeTitle, 
 			notice_content noticeContent 
 		FROM notice 
 		WHERE notice_no = #{noticeNo}
 	</select>
-	
+		
 	<insert id="addNotice" parameterType="com.example.diary.vo.Notice">
 		INSERT INTO notice(
 			member_id, 

@@ -3,9 +3,7 @@ package com.example.diary.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,7 +25,6 @@ public class MemberController {
 		this.memberService = memberService;
 	}
 	
-	// 로그인(get)
 	@GetMapping("/login")
 	public String login(HttpSession session) {
 		// 로그인이 되어 있다면 home 화면으로 redirect
@@ -37,24 +34,25 @@ public class MemberController {
 				
 		return "member/loginMember";
 	}
-	
-	// 로그인(post)
+		
+	@ResponseBody
 	@PostMapping("/login") 
 	public String login(HttpSession session, Member paramMember) { // 오버로딩 사용
-		
+			
 		Member loginMember = memberService.login(paramMember);
-		// 로그인을 실패하였다면 로그인 화면으로 redirect
-		if(loginMember == null) {
-			return "redirect:/login";
-		}
-
-		log.debug("로그인 성공 : " + loginMember);
 		
+		log.debug("로그인 성공 여부 확인(실패:null) : " + loginMember);
+		
+		// 로그인 실패
+		if(loginMember == null) { 
+			return "fail";
+		}
+		// 로그인 성공
 		session.setAttribute("loginMember", loginMember);
-		return "redirect:/home";
+		return "success";
+
 	}
 	
-	// 로그아웃
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
 		
@@ -62,7 +60,6 @@ public class MemberController {
 		return "redirect:/login";
 	}
 	
-	// 회원가입(get)
 	@GetMapping("/addMember")
 	public String addMember(HttpSession session) {
 		
@@ -76,8 +73,8 @@ public class MemberController {
 	}
 	
 	@ResponseBody
-	@GetMapping("/idCheck")
-	public int idCheck(String memberId) {
+	@GetMapping("/addMemberIdCheck")
+	public int addMemberIdCheck(String memberId) {
 		
 		int result = memberService.idCheck(memberId);
 		
@@ -86,7 +83,6 @@ public class MemberController {
 		return result;
 	}
 	
-	// 회원가입(post)
 	@PostMapping("/addMember")
 	public String addMember(HttpSession session, Member member) {
 		
@@ -103,7 +99,6 @@ public class MemberController {
 		return "redirect:/login";
 	}
 	
-	// 비밀번호 변경(get)
 	@GetMapping("/updateMemberPw")
 	public String updateMemberPw(HttpSession session) {
 		
@@ -116,20 +111,18 @@ public class MemberController {
 		return "member/updateMemberPw";
 	}
 	
-	// 비밀번호 변경(post)
+	@ResponseBody
 	@PostMapping("/updateMemberPw")
 	public String updateMemberPw(HttpSession session, String oldPw, String newPw) {
 		
 		if(session.getAttribute("loginMember") == null) {
 			// 로그인이 되어 있지 않은 상태
-			// 리다이렉트할 컨트롤러 url
-			return "redirect:/login";
+			return "notLogin";
 		}
 		Member loginMember = (Member) session.getAttribute("loginMember");
-		String memberId = loginMember.getMemberId();
 		
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("memberId", memberId);
+		paramMap.put("memberId", loginMember.getMemberId());
 		paramMap.put("oldPw", oldPw);
 		paramMap.put("newPw", newPw);
 		
@@ -137,15 +130,15 @@ public class MemberController {
 		
 		log.debug("회원 비밀번호 변경(성공:1,실패:0) : " + result);
 		
+		// 비밀번호 변경 실패
 		if(result != 1) {
-			return "redirect:/home";
+			return "fail";
 		}
-		
+		// 비밀번호 변경 성공
 		session.invalidate();
-		return "redirect:/login";
+		return "success";
 	}
 	
-	// 회원탈퇴(get)
 	@GetMapping("/deleteMember")
 	public String deleteMember(HttpSession session) {
 		
@@ -158,33 +151,31 @@ public class MemberController {
 		return "member/deleteMember";
 	}
 	
-	// 회원탈퇴(post)
+	@ResponseBody
 	@PostMapping("/deleteMember")
 	public String deleteMember(HttpSession session, String memberPw) {
 		
 		if(session.getAttribute("loginMember") == null) {
 			// 로그인이 되어 있지 않은 상태
-			// 리다이렉트할 컨트롤러 url
-			return "redirect:/login";
-		}
-		
+			return "notLogin";
+		}	
 		Member loginMember = (Member) session.getAttribute("loginMember");
-		String memberId = loginMember.getMemberId();
 		
 		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("memberId", memberId);
+		paramMap.put("memberId", loginMember.getMemberId());
 		paramMap.put("memberPw", memberPw);
 		
 		int result = memberService.deleteMember(paramMap);
 		
 		log.debug("회원탈퇴(성공:1,실패:0) : " + result);
 		
-		if(result != 1) {
-			return "redirect:/home";
+		// 회원 탈퇴 실패
+		if(result != 1) { 
+			return "fail";
 		}
-		
+		// 회원 탈퇴 성공
 		session.invalidate();
-		return "redirect:/login";
+		return "success";
 		
 	}
 	

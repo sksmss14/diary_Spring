@@ -17,11 +17,10 @@
 	<!-- 폰트 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
-
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap" rel="stylesheet">
 	<style>
 		#font {
-			font-family: 'Song Myung', serif;
+			font-family: 'IBM Plex Sans KR', sans-serif;
 		}
 	</style>
 </head>
@@ -36,18 +35,40 @@
 		
 			<div class="mb-3 mt-3">
 				<label for="noticeTitle" class="form-label">제목</label>
-			    <input type="text" class="form-control" id="noticeTitle" name="noticeTitle">
+			    <input type="text" class="form-control" id="noticeTitle" name="noticeTitle" placeholder="입력하기">
 			</div>
 			<div class="mb-3">
 				<label for="noticeContent" class="form-label">내용</label>
-				<textarea name="noticeContent" id="noticeContent" class="form-control" rows="15" maxlength="1000" style="resize:none; margin-bottom:10px;"></textarea>			
+				<textarea name="noticeContent" id="noticeContent" class="form-control" rows="15" maxlength="1000" style="resize:none; margin-bottom:10px;" placeholder="입력하기"></textarea>			
 			</div>
-			<button class="btn btn-dark">추가하기</button>
+			<div class="d-flex">
+				<button type="button" class="btn btn-dark" id="addBtn" style="margin-top:15px; margin-left:auto;">추가하기</button>
+			</div>	
 		</form>
 	</div>
 </body>
 
 <script>
+
 	$('#noticeTitle').focus();
+	
+	$('#addBtn').click(function(){
+		
+		if($('#noticeTitle').val().length == 0) {
+			alert('제목을 입력하세요.');
+			$('#noticeTitle').focus();
+			return;
+		}
+		
+		if($('#noticeContent').val().length == 0) {
+			alert('내용을 입력하세요.');
+			$('#noticeContent').focus();
+			return;
+		}
+		
+		$('#addForm').submit();
+	});
+	
+	
 </script>
 </html>

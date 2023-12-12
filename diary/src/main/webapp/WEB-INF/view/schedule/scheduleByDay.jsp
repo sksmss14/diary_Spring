@@ -18,10 +18,10 @@
 	<!-- 폰트 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap" rel="stylesheet">
 	<style>
 		#font {
-			font-family: 'Song Myung', serif;
+			font-family: 'IBM Plex Sans KR', sans-serif;
 		}
 	</style>
 </head>
@@ -54,9 +54,11 @@
 					<div>
 						<textarea class="form-control" style="resize:none; margin-top:5px;" disabled readonly rows="5" maxlength="300">${s.scheduleMemo}</textarea>
 					</div>
-					<div class="mb-3 mt-3">
-						<a href="${pageContext.request.contextPath}/updateSchedule?scheduleNo=${s.scheduleNo}&scheduleMemo=${s.scheduleMemo}&scheduleEmoji=${s.scheduleEmoji}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">수정</a>
-						<a href="${pageContext.request.contextPath}/deleteSchedule?scheduleNo=${s.scheduleNo}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">삭제</a>
+					<div class="mb-3 mt-3 d-flex">
+						<div style="margin-left:auto;">
+							<a href="${pageContext.request.contextPath}/updateSchedule?scheduleNo=${s.scheduleNo}&scheduleMemo=${s.scheduleMemo}&scheduleEmoji=${s.scheduleEmoji}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">수정</a>
+							<a href="${pageContext.request.contextPath}/deleteSchedule?scheduleNo=${s.scheduleNo}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-danger">삭제</a>
+						</div>
 					</div>
 					<c:set var="scheduleNo" value="${scheduleNo + 1}"></c:set> <!-- 일정 번호 증가 처리 -->
 				</c:forEach>
@@ -69,7 +71,7 @@
 	<!---------------------- 일정 추가 창 start --------------------->
 	<div class="row">
 		<div class="col-md-8">
-		<h3 style="margin-top:20px;">일정 추가</h3>
+		<h3 style="margin-top:20px; margin-bottom:15px;">일정 추가</h3>
 		<form method="post" id="scheduleForm" action="${pageContext.request.contextPath}/scheduleByDay">
 			<input type="hidden" name="scheduleYear" value="${scheduleYear}">
 			<input type="hidden" name="scheduleMonth" value="${scheduleMonth}">
@@ -86,8 +88,10 @@
 				</div>
 				<div class="col-md-10"></div>
 			</div>
-			<textarea rows="5" maxlength="300" name="scheduleMemo" id="scheduleMemo" class="form-control" style="resize:none; margin-top:10px;"></textarea>
-			<button type="button" class="btn btn-dark mt-3" style="margin-bottom:20px;" id="scheduleBtn">일정 추가</button>
+			<textarea rows="5" maxlength="300" name="scheduleMemo" id="scheduleMemo" placeholder="입력하기" class="form-control" style="resize:none; margin-top:10px;"></textarea>
+			<div class="d-flex">
+				<button type="button" class="btn btn-dark mt-3" style="margin-bottom:20px; margin-left:auto;" id="scheduleBtn">일정 추가</button>
+			</div>
 		</form>
 		</div>
 		<div class="col-md-4"></div>
@@ -96,13 +100,18 @@
 	</div>
 </body>
 <script>
-	$('#scheduleMemo').focus();
+	$('#scheduleEmoji').focus();
 	
 	$('#scheduleBtn').click(function(){
 		if($('#scheduleEmoji').val() == 0) {
 			alert('감정을 선택하세요.');
+			$('#scheduleEmoji').focus();
 			return;
-		}	
+		} else if($('#scheduleMemo').val() == 0) {
+			alert('일정을 입력하세요.');
+			$('#scheduleMemo').focus();
+			return;
+		}
 		$('#scheduleForm').submit();
 	});
 </script>

@@ -17,11 +17,10 @@
 	<!-- 폰트 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
-
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap" rel="stylesheet">
 	<style>
 		#font {
-			font-family: 'Song Myung', serif;
+			font-family: 'IBM Plex Sans KR', sans-serif;
 		}
 	</style>
 </head>
@@ -51,7 +50,7 @@
 			    <label for="memberPwCheck" class="form-label">비밀번호 확인</label>
 			    <input type="password" class="form-control" id="memberPwCheck" name="memberPwCheck" maxlength="15">
 			</div>		
-			<button type="button" id="addBtn" style="margin-top:20px;" class="btn btn-dark">회원가입</button>
+			<button type="button" id="addBtn" style="margin-top:15px;" class="btn btn-dark">회원가입</button>
 		</form>
 	</div>
 </body>
@@ -77,11 +76,11 @@
 		let memberId = $('#memberId').val();
 		if(memberId != '') {
 			$.ajax({
-				url : '${pageContext.request.contextPath}/idCheck',
+				url : '${pageContext.request.contextPath}/addMemberIdCheck',
 				method : 'get',
 				data : {memberId : memberId},
-				success : function(json) {
-					if(json == 1) {
+				success : function(result) {
+					if(result == 1) {
 						alert('이미 사용중인 아이디입니다.');
 						$('#memberId').focus();
 					} else if(memberId.length < 5) {
@@ -118,18 +117,22 @@
 	    if($('#memberPw').val() == '') { 
 			// 비밀번호 창에 아무것도 입력하지 않았을 때
 			alert('비밀번호를 입력하세요.');
+			$('#memberPw').focus();
 			return;
 		} else if($('#memberPw').val() != $('#memberPwCheck').val()) { 
 			// 비밀번호 일치 확인
 			alert('비밀번호가 일치하지 않습니다.');
+			$('#memberPw').focus();
 			return;
 		} else if($('#memberPw').val().length < 6 || $('#memberPwCheck').val().length < 6) { 
 			// 비밀번호 창의 입력값의 length가 6 미만일 때
 			alert('비밀번호를 6자 이상 입력하세요.');
+			$('#memberPw').focus();
 			return;
 		} else if(checkNumber <0 || checkEnglish <0){
 			// 숫자와 영어를 혼용하지 않았을 때
 	        alert("비밀번호는 숫자와 영문자를 혼용하여야 합니다.");
+	        $('#memberPw').focus();
 	        return;
 	    } 
 		

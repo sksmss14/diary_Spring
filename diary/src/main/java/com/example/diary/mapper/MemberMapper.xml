@@ -18,7 +18,7 @@
 		WHERE member_id = #{memberId}
 		AND member_pw = PASSWORD(#{memberPw})
 	</select>
-	
+		
 	<insert id="insertMember" parameterType="com.example.diary.vo.Member">
 		INSERT INTO member(
 			member_id,

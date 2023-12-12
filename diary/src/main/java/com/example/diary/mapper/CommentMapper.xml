@@ -10,7 +10,9 @@
 	</select>
 	
 	<select id="selectCommentList" parameterType="int" resultType="com.example.diary.vo.Comment">
-		SELECT m.member_id memberId, 
+		SELECT 
+			c.notice_no noticeNo,
+			m.member_id memberId, 
 			c.createdate createdate,
 			c.comment_no commentNo, 
 			c.comment comment, 
@@ -18,6 +20,7 @@
 		FROM member m INNER JOIN comment c
 		ON m.member_id = c.member_id
 		WHERE c.notice_no = #{noticeNo}
+		ORDER BY c.createdate
 	</select>
 	
 	<select id="selectCommentOne" parameterType="int" resultType="com.example.diary.vo.Comment">

@@ -7,6 +7,8 @@
 	<meta charset="UTF-8">
 	<title>공지 목록</title>
 	
+	<!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<!-- 부트스트랩 CDN -->
 	<!-- Latest compiled and minified CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">	
@@ -16,11 +18,15 @@
 	<!-- 폰트 -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@500&display=swap" rel="stylesheet">
 
 	<style>
+		.aStyle {
+  			text-decoration: none;
+		}
+	
 		.container {
-			font-family: 'Song Myung', serif;
+			font-family: 'IBM Plex Sans KR', sans-serif;
 		}
 		
 		#tb {
@@ -58,7 +64,7 @@
 					<td>${noticeNo}</td>
 					<td>${n.memberId}</td>
 					<td>
-						<a href="${pageContext.request.contextPath}/noticeOne?noticeNo=${n.noticeNo}">
+						<a href="${pageContext.request.contextPath}/noticeOne?noticeNo=${n.noticeNo}" class="aStyle">
 							${n.noticeTitle}
 						</a>				
 					</td>
@@ -66,7 +72,11 @@
 				<c:set var="noticeNo" value="${noticeNo + 1}"></c:set> <!-- 공지 번호 증가 처리 -->
 			</c:forEach>
 		</table>
-		<a href="${pageContext.request.contextPath}/addNotice">공지 추가</a>
+		<c:if test="${memberLevel == 1}">
+			<div class="d-flex">
+				<a href="${pageContext.request.contextPath}/addNotice" class="btn btn-dark" style="margin-left:auto;">공지 추가</a>
+			</div>			
+		</c:if>
 	</div>
 	<!---------------------- 공지 end --------------------->
 </body>
