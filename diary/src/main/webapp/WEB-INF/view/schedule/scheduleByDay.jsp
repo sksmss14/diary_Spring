@@ -90,7 +90,7 @@
 			</div>
 			<textarea rows="5" maxlength="300" name="scheduleMemo" id="scheduleMemo" placeholder="입력하기" class="form-control" style="resize:none; margin-top:10px;"></textarea>
 			<div class="d-flex">
-				<button type="button" class="btn btn-dark mt-3" style="margin-bottom:20px; margin-left:auto;" id="scheduleBtn">일정 추가</button>
+				<button type="button" class="btn btn-dark mt-3" style="margin-bottom:20px; margin-left:auto;" id="addBtn">일정 추가</button>
 			</div>
 		</form>
 		</div>
@@ -102,16 +102,18 @@
 <script>
 	$('#scheduleEmoji').focus();
 	
-	$('#scheduleBtn').click(function(){
+	$('#addBtn').click(function(){
+		
 		if($('#scheduleEmoji').val() == 0) {
 			alert('감정을 선택하세요.');
 			$('#scheduleEmoji').focus();
 			return;
-		} else if($('#scheduleMemo').val() == 0) {
+		} else if($('#scheduleMemo').val().trim() == '') {
 			alert('일정을 입력하세요.');
 			$('#scheduleMemo').focus();
 			return;
 		}
+		
 		$('#scheduleForm').submit();
 	});
 </script>

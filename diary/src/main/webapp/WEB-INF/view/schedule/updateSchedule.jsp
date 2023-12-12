@@ -89,7 +89,7 @@
 		if($('#scheduleEmoji').val() == 0) {
 			alert('감정을 선택하세요.');
 			return;
-		} else if($('#scheduleMemo').val() == 0) {
+		} else if($('#scheduleMemo').val().trim() == '') { // 스페이스바 입력으로 인한 공백 입력 방지
 			alert('일정을 입력하세요.');
 			$('#scheduleMemo').focus();
 			return;

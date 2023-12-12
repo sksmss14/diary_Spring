@@ -58,13 +58,13 @@
 	
 	$('#updateBtn').click(function(){
 		
-		if($('#noticeTitle').val().length == 0) {
+		if($('#noticeTitle').val().trim() == '') {
 			alert('제목을 입력하세요.');
 			$('#noticeTitle').focus();
 			return;
 		}
 		
-		if($('#noticeContent').val().length == 0) {
+		if($('#noticeContent').val().trim() == '') {
 			alert('내용을 입력하세요.');
 			$('#noticeContent').focus();
 			return;
@@ -92,7 +92,7 @@
 		            		location.href = '${pageContext.request.contextPath}/home';
 		            	} else if(result == 'failCheckPassword'){ // 비밀번호 불일치
 		            		alert('비밀번호가 일치하지 않습니다.');
-		            		location.href = '${pageContext.request.contextPath}/updateNotice?noticeNo=${noticeOne.noticeNo}';
+		            		$('#memberPw').focus();
 		            	} else if(result == 'fail') { // 공지 삭제 실패
 		            		alert('공지 수정 실패하였습니다.');
 		            		location.href = '${pageContext.request.contextPath}/updateNotice?noticeNo=${noticeOne.noticeNo}';

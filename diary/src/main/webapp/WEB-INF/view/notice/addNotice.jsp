@@ -54,13 +54,13 @@
 	
 	$('#addBtn').click(function(){
 		
-		if($('#noticeTitle').val().length == 0) {
+		if($('#noticeTitle').val().trim() == '') {
 			alert('제목을 입력하세요.');
 			$('#noticeTitle').focus();
 			return;
 		}
 		
-		if($('#noticeContent').val().length == 0) {
+		if($('#noticeContent').val().trim() == '') {
 			alert('내용을 입력하세요.');
 			$('#noticeContent').focus();
 			return;

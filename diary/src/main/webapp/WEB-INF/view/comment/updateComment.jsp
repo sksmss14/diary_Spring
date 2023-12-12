@@ -65,7 +65,7 @@
 	
 	$('#updateBtn').click(function(){
 		
-		if($('#comment').val().length == 0) {
+		if($('#comment').val().trim() == '') {
 			alert('댓글을 입력하세요.');
 			$('#comment').focus();
 			return;

@@ -106,7 +106,7 @@
 	$('#addBtn').click(function(){
 		
 		if(isIdCheck == false) {
-			alert('ID 중복체크를 하세요.')
+			alert('ID 중복체크를 하세요.');
 			$('#memberId').focus();
 			return;
 		}
@@ -114,7 +114,7 @@
 		let checkNumber = $('#memberPw').val().search(/[0-9]/g);
 	    let checkEnglish = $('#memberPw').val().search(/[a-z]/ig);
 	    
-	    if($('#memberPw').val() == '') { 
+	    if($('#memberPw').val().length == 0) { 
 			// 비밀번호 창에 아무것도 입력하지 않았을 때
 			alert('비밀번호를 입력하세요.');
 			$('#memberPw').focus();

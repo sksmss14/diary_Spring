@@ -50,6 +50,12 @@
 	
 	$('#deleteBtn').click(function(){
 		
+		if($('#memberPw').val().length == 0) {
+			alert('비밀번호를 입력하세요.');
+			$('#memberPw').focus();
+			return;
+		}
+		
 		// form 안의 parameter들을 한 번에 전송 가능한 data로 만듦.
 		let dataset = $('#deleteForm').serialize();
 		

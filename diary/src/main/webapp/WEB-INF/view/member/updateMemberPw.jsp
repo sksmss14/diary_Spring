@@ -68,7 +68,7 @@
 			alert('변경할 비밀번호를 입력하세요.');
 			$('#newPw').focus();
 			return;
-		} else if($('#memberPw').val() != $('#memberPwCheck').val()) { 
+		} else if($('#newPw').val() != $('#memberPwCheck').val()) { 
 			// 비밀번호 일치 확인
 			alert('변경할 비밀번호가 일치하지 않습니다.');
 			$('#newPw').focus();
@@ -86,7 +86,7 @@
 		            	if(result == 'notLogin'){ // 로그아웃 상태 
 		            		location.href = '${pageContext.request.contextPath}/login';
 		            	} else if(result == 'fail') { // 회원 탈퇴 실패
-		            		alert('비밀번호 변경 실패하였습니다. 비밀번호를 확인하세요.');
+		            		alert('비밀번호 변경 실패하였습니다. 변경 전 비밀번호를 확인하세요.');
 		            		$('#oldPw').focus();
 		            	} else { // 회원 탈퇴 성공
 		            		alert('비밀번호 변경 성공!');
