@@ -33,7 +33,7 @@
 	
 	<div style="margin-top:130px; margin-bottom:50px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h3>댓글 수정</h3>
-		<form method="post" action="${pageContext.request.contextPath}/updateComment" id="updateForm">
+		<form method="post" id="updateForm">
 			<input type="hidden" name="commentNo" value="${commentOne.commentNo}">
 			<input type="hidden" name="memberId" value="${commentOne.memberId}">
 			<div class="mb-3 mt-3">

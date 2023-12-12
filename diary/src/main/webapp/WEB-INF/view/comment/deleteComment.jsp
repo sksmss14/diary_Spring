@@ -32,7 +32,7 @@
 	
 	<div style="margin-top:150px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h3>댓글 삭제</h3>
-		<form method="post" action="${pageContext.request.contextPath}/deleteComment" id="deleteForm">		
+		<form method="post" id="deleteForm">		
 			<input type="hidden" value="${commentNo}" name="commentNo">
 			<input type="hidden" value="${memberId}" name="memberId">			
 			<div class="mb-3 mt-3">

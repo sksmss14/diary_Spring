@@ -33,7 +33,7 @@
 
 	<div style="margin-top:150px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h1>비밀번호 수정</h1>
-		<form method="post" action="${pageContext.request.contextPath}/updateMemberPw" id="updateForm">
+		<form method="post" id="updateForm">
 			<div class="mb-3 mt-3">
 				<label for="oldPw" class="form-label">변경 전 비밀번호</label>
 			    <input type="password" class="form-control" id="oldPw" name="oldPw" maxlength="15" placeholder="입력하기">

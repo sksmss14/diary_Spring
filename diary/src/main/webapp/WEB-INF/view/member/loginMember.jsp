@@ -31,7 +31,7 @@
 
 	<div style="margin-top:130px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h1>로그인</h1>
-		<form id="loginForm" method="post" action="${pageContext.request.contextPath}/login">
+		<form id="loginForm" method="post">
 			<div class="mb-3 mt-3">
 			    <label for="memberId" class="form-label">아이디</label>
 			    <input type="text" class="form-control" id="memberId" name="memberId" maxlength="15" placeholder="입력하기">

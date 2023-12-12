@@ -31,7 +31,7 @@
 	
 	<div style="margin-top:150px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h3>공지 삭제</h3>
-		<form method="post" action="${pageContext.request.contextPath}/deleteNotice" id="deleteForm">
+		<form method="post" id="deleteForm">
 			<input type="hidden" value="${noticeNo}" name="noticeNo">
 			<div class="mb-3 mt-3">
 				<label for="memberPw" class="form-label">비밀번호 입력</label>

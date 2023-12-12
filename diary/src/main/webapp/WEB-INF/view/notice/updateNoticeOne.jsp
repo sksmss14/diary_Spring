@@ -32,7 +32,7 @@
 	
 	<div style="margin-top:50px; margin-bottom:50px; width:50%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h3>공지 수정</h3>
-		<form method="post" action="${pageContext.request.contextPath}/updateNotice" id="updateForm">
+		<form method="post" id="updateForm">
 			<input type="hidden" value="${noticeOne.noticeNo}" name="noticeNo">
 			<div class="mb-3 mt-3">
 				<label for="noticeTitle" class="form-label">제목</label>

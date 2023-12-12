@@ -33,7 +33,7 @@
 
 	<div style="margin-top:150px; width:30%; padding:65px;" class="mx-auto border rounded" id="font">
 		<h1>회원 탈퇴</h1>
-		<form method="post" action="${pageContext.request.contextPath}/deleteMember" id="deleteForm">					
+		<form method="post" id="deleteForm">					
 			<div class="mb-3 mt-3">
 				<label for="memberPw" class="form-label">비밀번호 입력</label>
 			    <input type="password" class="form-control" id="memberPw" placeholder="입력하기" name="memberPw" maxlength="15">

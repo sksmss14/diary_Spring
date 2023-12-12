@@ -80,7 +80,7 @@
 				<!---------------------- 댓글 작성창 start --------------------->
 				<div class="col-md-6">	
 					<c:if test="${memberId != null}">
-						<form method="post" action="${pageContext.request.contextPath}/addComment" id="addForm">
+						<form method="post" id="addForm">
 							<input type="hidden" value="${noticeOne.noticeNo}" name="noticeNo">
 							<div class="mb-3 mt-3">
 								<label for="comment" class="form-label">댓글</label>
