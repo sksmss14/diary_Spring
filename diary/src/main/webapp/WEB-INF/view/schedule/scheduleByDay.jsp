@@ -125,6 +125,8 @@
 				console.log(data);
 				$('#scheduleMemo').val('');
 				$('#newList').html(data);
+				// 스크롤 바를 맨 밑으로 이동시키고 애니메이션의 속도를 0.05초로 설정
+				$('html, body').animate({ scrollTop: $(document).height() }, 50);
 			},
 			error : function() {
 				// 로그아웃된 상태에서 버튼 클릭시 error 발생
