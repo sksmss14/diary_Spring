@@ -35,34 +35,34 @@
 		<div class="row">
 			<div class="col-md-8" style="margin-top:50px;">
 				<h3 style="margin-bottom:15px;">${scheduleYear}년 ${scheduleMonth}월 ${scheduleDay}일 일정 목록</h3>
-				<c:set var="scheduleNo" value="1"></c:set> <!-- 일정 번호 생성 -->
-				
-				<c:forEach var="s" items="${list}">
-					<c:if test="${s.scheduleEmoji == 1}">
-						<div style="font-size:20px;">No.${scheduleNo} : &#128512;</div>
-					</c:if>
-					<c:if test="${s.scheduleEmoji == 2}">
-						<div style="font-size:20px;">No.${scheduleNo} : &#128545;</div>
-					</c:if>
-					<c:if test="${s.scheduleEmoji == 3}">
-						<div style="font-size:20px;">No.${scheduleNo} : &#128532;</div>
-					</c:if>
-					<c:if test="${s.scheduleEmoji == 4}">
-						<div style="font-size:20px;">No.${scheduleNo} : &#128518;</div>
-					</c:if>
-					
-					<div>
-						<textarea class="form-control" style="resize:none; margin-top:5px;" disabled readonly rows="5" maxlength="300">${s.scheduleMemo}</textarea>
-					</div>
-					<div class="mb-3 mt-3 d-flex">
-						<div style="margin-left:auto;">
-							<a href="${pageContext.request.contextPath}/updateSchedule?scheduleNo=${s.scheduleNo}&scheduleMemo=${s.scheduleMemo}&scheduleEmoji=${s.scheduleEmoji}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">수정</a>
-							<a href="${pageContext.request.contextPath}/deleteSchedule?scheduleNo=${s.scheduleNo}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-danger">삭제</a>
+				<div id="newList">		
+					<c:set var="scheduleNo" value="1"></c:set> <!-- 일정 번호 생성 -->		
+					<c:forEach var="s" items="${list}">
+						<c:if test="${s.scheduleEmoji == 1}">
+							<div style="font-size:20px;">No.${scheduleNo} : &#128512;</div>
+						</c:if>
+						<c:if test="${s.scheduleEmoji == 2}">
+							<div style="font-size:20px;">No.${scheduleNo} : &#128545;</div>
+						</c:if>
+						<c:if test="${s.scheduleEmoji == 3}">
+							<div style="font-size:20px;">No.${scheduleNo} : &#128532;</div>
+						</c:if>
+						<c:if test="${s.scheduleEmoji == 4}">
+							<div style="font-size:20px;">No.${scheduleNo} : &#128518;</div>
+						</c:if>
+						
+						<div>
+							<textarea class="form-control" style="resize:none; margin-top:5px;" disabled readonly rows="5" maxlength="300">${s.scheduleMemo}</textarea>
 						</div>
-					</div>
-					<c:set var="scheduleNo" value="${scheduleNo + 1}"></c:set> <!-- 일정 번호 증가 처리 -->
-				</c:forEach>
-				
+						<div class="mb-3 mt-3 d-flex">
+							<div style="margin-left:auto;">
+								<a href="${pageContext.request.contextPath}/updateSchedule?scheduleNo=${s.scheduleNo}&scheduleMemo=${s.scheduleMemo}&scheduleEmoji=${s.scheduleEmoji}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">수정</a>
+								<a href="${pageContext.request.contextPath}/deleteSchedule?scheduleNo=${s.scheduleNo}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-danger">삭제</a>
+							</div>
+						</div>
+						<c:set var="scheduleNo" value="${scheduleNo + 1}"></c:set> <!-- 일정 번호 증가 처리 -->
+					</c:forEach>
+				</div>				
 			</div>
 			<div class="col-md-4"></div>
 		</div>
@@ -72,7 +72,7 @@
 	<div class="row">
 		<div class="col-md-8">
 		<h3 style="margin-top:20px; margin-bottom:15px;">일정 추가</h3>
-		<form method="post" id="scheduleForm" action="${pageContext.request.contextPath}/scheduleByDay">
+		<form method="post" id="scheduleForm">
 			<input type="hidden" name="scheduleYear" value="${scheduleYear}">
 			<input type="hidden" name="scheduleMonth" value="${scheduleMonth}">
 			<input type="hidden" name="scheduleDay" value="${scheduleDay}">
@@ -113,8 +113,25 @@
 			$('#scheduleMemo').focus();
 			return;
 		}
+		        
+        let dataset = $('#scheduleForm').serialize();
 		
-		$('#scheduleForm').submit();
+		$.ajax({
+			url : '${pageContext.request.contextPath}/addSchedule',
+			method : 'post',
+			data : dataset,
+			success : function(data) {
+				console.log('성공');
+				console.log(data);
+				$('#scheduleMemo').val('');
+				$('#newList').html(data);
+			},
+			error : function() {
+				// 로그아웃된 상태에서 버튼 클릭시 error 발생
+            	alert('로그아웃 상태입니다. 로그인 페이지로 이동합니다.');
+         		location.href = '${pageContext.request.contextPath}/login';
+			}
+		});
 	});
 </script>
 </html>

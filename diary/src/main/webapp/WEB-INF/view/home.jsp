@@ -157,7 +157,7 @@
                 console.log($('#targetYear').val() + '년 ' + $('#targetMonth').val() + '월');
              },
              error : function() { 
-            	// 로그아웃된 상태에서 버튼 클릭시 changeCalendar 메서드에서 null을 반환하여 ajax 실행x -> error 발생
+            	// 로그아웃된 상태에서 버튼 클릭시 error 발생
             	alert('로그아웃 상태입니다. 로그인 페이지로 이동합니다.');
          		location.href = '${pageContext.request.contextPath}/login';
              }
