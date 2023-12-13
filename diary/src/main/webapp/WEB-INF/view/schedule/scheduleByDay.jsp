@@ -57,7 +57,7 @@
 						<div class="mb-3 mt-3 d-flex">
 							<div style="margin-left:auto;">
 								<a href="${pageContext.request.contextPath}/updateSchedule?scheduleNo=${s.scheduleNo}&scheduleMemo=${s.scheduleMemo}&scheduleEmoji=${s.scheduleEmoji}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-dark">수정</a>
-								<a href="${pageContext.request.contextPath}/deleteSchedule?scheduleNo=${s.scheduleNo}&scheduleYear=${scheduleYear}&scheduleMonth=${scheduleMonth}&scheduleDay=${scheduleDay}" class="btn btn-danger">삭제</a>
+								<a class="btn btn-danger deleteBtn" data-value="${s.scheduleNo}">삭제</a>
 							</div>
 						</div>
 						<c:set var="scheduleNo" value="${scheduleNo + 1}"></c:set> <!-- 일정 번호 증가 처리 -->
@@ -100,6 +100,7 @@
 	</div>
 </body>
 <script>
+			
 	$('#scheduleEmoji').focus();
 	
 	$('#addBtn').click(function(){
@@ -120,11 +121,11 @@
 			url : '${pageContext.request.contextPath}/addSchedule',
 			method : 'post',
 			data : dataset,
-			success : function(data) {
+			success : function(result) {
 				console.log('성공');
-				console.log(data);
 				$('#scheduleMemo').val('');
-				$('#newList').html(data);
+				$('#scheduleEmoji').val(0);
+				$('#newList').html(result);
 				// 스크롤 바를 맨 밑으로 이동시키고 애니메이션의 속도를 0.05초로 설정
 				$('html, body').animate({ scrollTop: $(document).height() }, 50);
 			},
@@ -135,5 +136,34 @@
 			}
 		});
 	});
+	
+	// 동적으로 추가된 요소에 대해서도 이벤트를 처리하기 위해 부모 요소(#newList)에 이벤트를 위임
+	// click : 적용할 이벤트
+	// .deleteBtn : 이벤트를 적용할 태그
+	// function() : 동작 함수
+	$('#newList').on('click', '.deleteBtn', function(e) {
+			
+		$.ajax({
+			url : '${pageContext.request.contextPath}/deleteSchedule',
+			method : 'get',
+			data : {
+				scheduleNo : e.target.dataset.value, // a 태그의 data-value 
+				scheduleYear : '${scheduleYear}',
+				scheduleMonth : '${scheduleMonth}',
+				scheduleDay : '${scheduleDay}'
+			},
+			success : function(result) {
+				console.log('성공');
+				$('#newList').html(result);
+			},
+			error : function() {
+				// 로그아웃된 상태에서 버튼 클릭시 error 발생
+            	alert('로그아웃 상태입니다. 로그인 페이지로 이동합니다.');
+         		location.href = '${pageContext.request.contextPath}/login';
+			}
+		});
+		
+	});
+
 </script>
 </html>

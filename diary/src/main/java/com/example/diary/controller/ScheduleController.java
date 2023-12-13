@@ -67,10 +67,6 @@ public class ScheduleController {
 		
 		Member loginMember = (Member) session.getAttribute("loginMember");
 		
-		model.addAttribute("scheduleYear", scheduleYear);
-		model.addAttribute("scheduleMonth", scheduleMonth);
-		model.addAttribute("scheduleDay", scheduleDay);
-		
 		Map<String, Object> paramMap1 = new HashMap<>();
 		
 		try {
@@ -81,6 +77,7 @@ public class ScheduleController {
 		}
 		paramMap1.put("scheduleMemo", scheduleMemo);
 		paramMap1.put("scheduleEmoji", scheduleEmoji);
+		
 		// 일정 추가
 		int result = scheduleService.addSchedule(paramMap1, scheduleYear, scheduleMonth, scheduleDay);
 		
@@ -91,12 +88,18 @@ public class ScheduleController {
 		paramMap2.put("scheduleYear", scheduleYear);
 		paramMap2.put("scheduleMonth", scheduleMonth);
 		paramMap2.put("scheduleDay", scheduleDay);
-		// 일정 추가 후 view에 보낼 목록
+		
+		// 일정 추가 후 view에 보낼 일정 목록
 		List<Schedule> list = scheduleService.getScheduleByDay(paramMap2);
 		
 		log.debug("일정 목록 : " + list);
 		
 		model.addAttribute("list", list);
+		
+		// 수정 링크의 parameter
+		model.addAttribute("scheduleYear", scheduleYear);
+		model.addAttribute("scheduleMonth", scheduleMonth);
+		model.addAttribute("scheduleDay", scheduleDay);
 			
 		return "schedule/scheduleFragment";
 		
@@ -150,18 +153,40 @@ public class ScheduleController {
 	}
 	
 	@GetMapping("/deleteSchedule")
-	public String deleteSchedule(HttpSession session,
+	public String deleteSchedule(HttpSession session, Model model,
 									int scheduleNo, int scheduleYear,
 									int scheduleMonth, int scheduleDay) {
 		
-		if(session.getAttribute("loginMember") == null) {
-			// 로그인이 되어 있지 않은 상태
-			// 리다이렉트할 컨트롤러 url
-			return "redirect:/login";
-		}
+		Member loginMember = (Member) session.getAttribute("loginMember");
 		
+		// 일정 삭제
 		int result = scheduleService.deleteSchedule(scheduleNo);
 		
-		return "redirect:/scheduleByDay?scheduleYear=" + scheduleYear + "&scheduleMonth=" + scheduleMonth + "&scheduleDay=" + scheduleDay;
+		log.debug("일정 삭제(성공:1,실패:0) : " + result);
+		
+		Map<String, Object> paramMap = new HashMap<>();
+		try {
+			paramMap.put("memberId", loginMember.getMemberId()); 
+		} catch(NullPointerException e) {
+			log.error("로그아웃하고 접근시 NullPointerException 발생 -> null을 반환하면 ajax error 코드 실행");
+			return null;
+		}
+		paramMap.put("scheduleYear", scheduleYear);
+		paramMap.put("scheduleMonth", scheduleMonth);
+		paramMap.put("scheduleDay", scheduleDay);
+		
+		// 일정 삭제 후 view에 보낼 일정 목록
+		List<Schedule> list = scheduleService.getScheduleByDay(paramMap);
+		
+		log.debug("일정 목록 : " + list);
+		
+		model.addAttribute("list", list);
+		
+		// 수정 링크의 parameter
+		model.addAttribute("scheduleYear", scheduleYear);
+		model.addAttribute("scheduleMonth", scheduleMonth);
+		model.addAttribute("scheduleDay", scheduleDay);
+		
+		return "schedule/scheduleFragment";
 	}
 }
