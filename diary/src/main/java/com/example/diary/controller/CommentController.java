@@ -1,5 +1,7 @@
 package com.example.diary.controller;
 
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.diary.vo.Member;
+import com.example.diary.vo.Notice;
 import com.example.diary.service.CommentService;
+import com.example.diary.service.NoticeService;
 import com.example.diary.vo.Comment;
 
 import jakarta.servlet.http.HttpSession;
@@ -19,42 +23,53 @@ import lombok.extern.slf4j.Slf4j;
 public class CommentController {
 	
 	private CommentService commentService;
+	private NoticeService noticeService;
 	
 	// 생성자 주입(@Autowired 생략)
-	public CommentController(CommentService commentService) {
+	public CommentController(CommentService commentService,
+								NoticeService noticeService) {
 		this.commentService = commentService;
+		this.noticeService = noticeService;
 	}
 	
-	@ResponseBody
 	@PostMapping("/addComment")
-	public String addComment(HttpSession session, int noticeNo, String comment, String isSecret) {
-						
-		// 로그인이 되어 있지 않았다면 로그인 페이지로 이동
-		if(session.getAttribute("loginMember") == null) {
-			return "notLogin"; 
-		}
-		
+	public String addComment(HttpSession session, Model model,
+								int noticeNo, String comment, 
+								@RequestParam(defaultValue = "false") String isSecret) {
+								
 		Member loginMember = (Member) session.getAttribute("loginMember");
 		
 		Comment c = new Comment();
-		// 비밀글 체크가 되어 있다면 Comment 객체의 isSecret 변수에 true 할당
-		if(isSecret == null) {
-			isSecret = "false";
-		}
 		
 		c.setNoticeNo(noticeNo);
-		c.setMemberId(loginMember.getMemberId());
+		try {
+			c.setMemberId(loginMember.getMemberId()); 
+		} catch(NullPointerException e) {
+			log.error("로그아웃하고 접근시 NullPointerException 발생 -> null을 반환하면 ajax error 코드 실행");
+			return null;
+		}
 		c.setComment(comment);
 		c.setIsSecret(isSecret);
 				
 		int result = commentService.addComment(c);
 		
-		log.debug("댓글 추가(성공:1,실패:0)" + result);
+		log.debug("댓글 추가(성공:1,실패:0) : " + result);
 		
-		if(result != 1) {
-			return "fail";
-		}
-		return "success";    //"redirect:/noticeOne?noticeNo="+noticeNo;
+		String memberId = loginMember.getMemberId();
+		int memberLevel = loginMember.getMemberLevel(); 
+		
+		int commentCount = commentService.getCommentCount(noticeNo);
+		
+		List<Comment> commentList = commentService.selectCommentList(noticeNo);
+
+		log.debug("댓글 목록 : " + commentList);
+		
+		model.addAttribute("commentList", commentList);
+		model.addAttribute("commentCount", commentCount);
+		model.addAttribute("memberId", memberId);
+		model.addAttribute("memberLevel", memberLevel);
+		
+		return "comment/commentFragment";  
 	}
 	
 	@ResponseBody

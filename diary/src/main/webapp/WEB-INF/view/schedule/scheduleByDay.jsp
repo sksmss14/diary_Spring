@@ -103,6 +103,7 @@
 			
 	$('#scheduleEmoji').focus();
 	
+	// 일정 추가
 	$('#addBtn').click(function(){
 		
 		if($('#scheduleEmoji').val() == 0) {
@@ -122,7 +123,7 @@
 			method : 'post',
 			data : dataset,
 			success : function(result) {
-				console.log('성공');
+				console.log('일정 추가 성공');
 				$('#scheduleMemo').val('');
 				$('#scheduleEmoji').val(0);
 				$('#newList').html(result);
@@ -142,6 +143,8 @@
 	// .deleteBtn : 이벤트를 적용할 태그
 	// function() : 동작 함수
 	$('#newList').on('click', '.deleteBtn', function(e) {
+		
+		console.log('동적으로 추가된 요소');
 			
 		$.ajax({
 			url : '${pageContext.request.contextPath}/deleteSchedule',
@@ -153,7 +156,7 @@
 				scheduleDay : '${scheduleDay}'
 			},
 			success : function(result) {
-				console.log('성공');
+				console.log('일정 삭제 성공');
 				$('#newList').html(result);
 			},
 			error : function() {

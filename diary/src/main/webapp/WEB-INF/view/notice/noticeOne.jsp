@@ -64,14 +64,15 @@
 			</tr>
 		</table>
 		
-			<div class="d-flex" style="margin-bottom:13px;">
+			<div class="d-flex" style="margin-bottom:13px;" id="btnTextCheck">
 				<c:if test="${memberLevel == 1}">
 					<a href="${pageContext.request.contextPath}/updateNotice?noticeNo=${noticeOne.noticeNo}" style="margin-right:10px;" id="updateNoticeBtn" class="btn btn-dark">공지 수정</a>
 					<a href="${pageContext.request.contextPath}/deleteNotice?noticeNo=${noticeOne.noticeNo}" id="deleteNoticeBtn" class="btn btn-danger">공지 삭제</a>
 				</c:if>
 				<!--collapse start-->
-				<a href="#demo" data-bs-toggle="collapse" class="btn btn-dark" style="margin-left:auto">
-					댓글 : ${commentCount}개
+				<a href="#newList" data-bs-toggle="collapse" class="btn btn-dark" style="margin-left:auto">
+
+					댓글 : <span id="commentCnt">${commentCount}</span>개
 				</a>
 			</div>		
 			<!---------------------- 공지 상세창 end --------------------->
@@ -97,7 +98,7 @@
 				<!---------------------- 댓글 작성창 end --------------------->
 				
 				<!---------------------- 댓글창 start --------------------->
-				<div id="demo" class="collapse col-md-6">
+				<div id="newList" class="collapse col-md-6">
 					<table class="table table-bordered" style="margin-bottom:40px;">
 						<colgroup>
 							<col width="79%">
@@ -143,7 +144,8 @@
 		</div>				
 </body>
 <script>
-
+	
+	// 댓글 추가
 	$('#addCommentBtn').click(function(){
 		
 		if($('#comment').val().trim() == '') {
@@ -160,15 +162,18 @@
             method : 'post',
             data : dataset,
             success : function(result){
-		            	if(result == 'notLogin') { // 로그아웃 상태
-		            		alert('권한이 없습니다.');
-		            		location.href = '${pageContext.request.contextPath}/login';
-		            	} else if(result == 'fail') { // 댓글 추가 실패
-		            		alert('댓글 추가 실패');
-		            		location.href = '${pageContext.request.contextPath}/noticeOne?noticeNo=${noticeOne.noticeNo}';
-		            	} else { // 댓글 추가 성공
-		            		location.href = '${pageContext.request.contextPath}/noticeOne?noticeNo=${noticeOne.noticeNo}';
-		            	}
+            	console.log('댓글 추가 성공');
+            	$('#comment').val('');
+            	// 댓글 버튼에 표시되는 댓글 개수 변경
+            	$('#commentCnt').text(parseInt($('#commentCnt').text())+1);
+				$('#newList').html(result);
+				// 스크롤 바를 맨 밑으로 이동시키고 애니메이션의 속도를 0.05초로 설정
+				$('html, body').animate({ scrollTop: $(document).height() }, 50);
+   			},
+   			error : function(){
+   				// 로그아웃된 상태에서 버튼 클릭시 error 발생
+            	alert('로그아웃 상태입니다. 로그인 페이지로 이동합니다.');
+         		location.href = '${pageContext.request.contextPath}/login';
    			}
 		});
 		
