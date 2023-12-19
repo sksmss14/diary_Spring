@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
 @Transactional
+@Service
 public class CalendarService {
 	
 	public Map<String, Object> getCalendar(Integer targetYear, Integer targetMonth) {

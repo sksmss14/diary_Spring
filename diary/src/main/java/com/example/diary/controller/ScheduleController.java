@@ -15,19 +15,16 @@ import com.example.diary.vo.Member;
 import com.example.diary.vo.Schedule;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Controller
 public class ScheduleController {
 	
-	private ScheduleService scheduleService;
-	
-	// 생성자 주입(@Autowired 생략)
-	public ScheduleController(ScheduleService scheduleService) {
-		this.scheduleService = scheduleService;
-	}
-	
+	private final ScheduleService scheduleService;
+		
 	@GetMapping("/scheduleByDay")
 	public String scheduleByDay(HttpSession session, Model model,
 									int scheduleYear, int scheduleMonth,

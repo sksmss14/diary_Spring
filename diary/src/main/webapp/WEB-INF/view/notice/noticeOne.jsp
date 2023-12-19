@@ -124,10 +124,12 @@
 								
 							</tr>
 							<tr>
-								<c:if test="${list.isSecret.equals('false') ||  list.memberId == memberId || memberLevel == 1}">		
+								<!-- 비밀글 체크x or 현재 접속자와 댓글 작성자가 동일 or 관리자 -->
+								<c:if test="${list.isSecret == 'false' ||  list.memberId == memberId || memberLevel == 1}">		
 									<td colspan="2">${list.comment}</td>
 								</c:if>
-								<c:if test="${list.isSecret.equals('true') && list.memberId != memberId && memberLevel != 1}">
+								<!-- 비밀글 체크 and 현재 접속자와 댓글 작성자가 다름 and 관리자x -->
+								<c:if test="${list.isSecret == 'true' && list.memberId != memberId && memberLevel != 1}">
 									<td colspan="2" style="color:red;">비밀글입니다. (본인, 관리자만 확인 가능합니다.)</td>
 								</c:if>
 							</tr>

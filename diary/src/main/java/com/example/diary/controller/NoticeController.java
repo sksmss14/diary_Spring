@@ -15,21 +15,17 @@ import com.example.diary.vo.Member;
 import com.example.diary.vo.Notice;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Controller
 public class NoticeController {
 	
-	private NoticeService noticeService;
-	private CommentService commentService;
-	
-	// 생성자 주입(@Autowired 생략)
-	public NoticeController(NoticeService noticeService, CommentService commentService) {
-		this.noticeService = noticeService;
-		this.commentService = commentService;
-	}
-	
+	private final NoticeService noticeService;
+	private final CommentService commentService;
+		
 	@GetMapping("/notice")
 	public String notice(Notice paramNotice, HttpSession session, Model model) {
 		

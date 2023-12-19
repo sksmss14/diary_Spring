@@ -9,7 +9,7 @@ import com.example.diary.vo.Member;
 
 @Mapper
 public interface CommentMapper {
-
+		
 	int getCommentCount(int noticeNo);
 	
 	List<Comment> selectCommentList(int noticeNo);

@@ -11,20 +11,17 @@ import com.example.diary.mapper.CommentMapper;
 import com.example.diary.vo.Comment;
 import com.example.diary.vo.Member;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Transactional
+@Service
 public class CommentService {
 	
-	private CommentMapper commentMapper;
-	
-	// 생성자 주입(@Autowired 생략)
-	public CommentService(CommentMapper commentMapper) {
-		this.commentMapper = commentMapper;
-	}
-	
+	private final CommentMapper commentMapper;
+		
 	public int getCommentCount(int noticeNo) {
 		
 		int result = commentMapper.getCommentCount(noticeNo);

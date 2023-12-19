@@ -10,28 +10,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.diary.vo.Member;
-import com.example.diary.vo.Notice;
 import com.example.diary.service.CommentService;
-import com.example.diary.service.NoticeService;
 import com.example.diary.vo.Comment;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Controller
 public class CommentController {
 	
-	private CommentService commentService;
-	private NoticeService noticeService;
-	
-	// 생성자 주입(@Autowired 생략)
-	public CommentController(CommentService commentService,
-								NoticeService noticeService) {
-		this.commentService = commentService;
-		this.noticeService = noticeService;
-	}
-	
+	private final CommentService commentService;
+		
 	@PostMapping("/addComment")
 	public String addComment(HttpSession session, Model model,
 								int noticeNo, String comment, 

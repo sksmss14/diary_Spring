@@ -10,20 +10,17 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.diary.mapper.ScheduleMapper;
 import com.example.diary.vo.Schedule;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Transactional
+@Service
 public class ScheduleService {
 	
-	private ScheduleMapper scheduleMapper;
-	
-	// 생성자 주입(@Autowired 생략)
-	public ScheduleService(ScheduleMapper scheduleMapper) {
-		this.scheduleMapper = scheduleMapper;
-	}
-	
+	private final ScheduleMapper scheduleMapper;
+		
 	public List<Map<String, Object>> getScheduleListByMonth(Map<String, Object> paramMap) {
 		
 		List<Map<String, Object>> selectScheduleListByMonth = scheduleMapper.selectScheduleListByMonth(paramMap);

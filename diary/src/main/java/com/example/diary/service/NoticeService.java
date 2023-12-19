@@ -9,20 +9,17 @@ import com.example.diary.mapper.NoticeMapper;
 import com.example.diary.vo.Member;
 import com.example.diary.vo.Notice;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Transactional
+@Service
 public class NoticeService {
 	
-	private NoticeMapper noticeMapper;
-	
-	// 생성자 주입(@Autowired 생략)
-	public NoticeService(NoticeMapper noticeMapper) {
-		this.noticeMapper = noticeMapper;
-	}
-	
+	private final NoticeMapper noticeMapper;
+		
 	public List<Notice> selectNoticeList(Notice paramNotice) {
 		
 		List<Notice> noticeList = noticeMapper.selectNoticeList();

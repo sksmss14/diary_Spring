@@ -12,19 +12,16 @@ import com.example.diary.service.MemberService;
 import com.example.diary.vo.Member;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Controller
 public class MemberController {
 	
-	private MemberService memberService;
-	
-	// 생성자 주입(@Autowired 생략)
-	public MemberController(MemberService memberService) {
-		this.memberService = memberService;
-	}
-	
+	private final MemberService memberService;
+		
 	@GetMapping("/login")
 	public String login(HttpSession session) {
 		// 로그인이 되어 있다면 home 화면으로 redirect

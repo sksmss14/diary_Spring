@@ -13,20 +13,16 @@ import com.example.diary.service.ScheduleService;
 import com.example.diary.vo.Member;
 
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Controller
 public class HomeController {
 	
-	private CalendarService calendarService;
-	private ScheduleService scheduleService;
-	
-	// 생성자 주입(@Autowired 생략)
-	public HomeController(CalendarService calendarService, ScheduleService scheduleService) {
-		this.calendarService = calendarService;
-		this.scheduleService = scheduleService;
-	}
+	private final CalendarService calendarService;
+	private final ScheduleService scheduleService;
 	
 	@GetMapping("/home")
 	public String home(HttpSession session, Model model,

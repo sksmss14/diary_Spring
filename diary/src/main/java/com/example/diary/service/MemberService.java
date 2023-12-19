@@ -10,20 +10,17 @@ import org.springframework.ui.Model;
 import com.example.diary.mapper.MemberMapper;
 import com.example.diary.vo.Member;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@RequiredArgsConstructor // 클래스에 선언된 final 필드들을 매개변수로 하는 생성자를 자동으로 생성
 @Transactional
+@Service
 public class MemberService {
 	
-	private MemberMapper memberMapper;
-	
-	// 생성자 주입(@Autowired 생략)
-	public MemberService(MemberMapper memberMapper) {
-		this.memberMapper = memberMapper;
-	}
-	
+	private final MemberMapper memberMapper;
+		
 	public int idCheck(String memberId) {
 		
 		int result = memberMapper.idCheck(memberId);
