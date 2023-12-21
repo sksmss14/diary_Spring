@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diary.mapper.ScheduleMapper">
+
+	<select id="selectScheduleListByMonth" parameterType="Map" 
+								resultType="Map">
+		SELECT
+           DAY(schedule_date) scheduleDay,
+           COUNT(*) cnt,
+           GROUP_CONCAT(substr(schedule_memo, 1, 5)) memo
+        FROM schedule
+        WHERE member_id = #{memberId} 
+        AND YEAR(schedule_date) = #{year}
+        AND MONTH(schedule_date) = #{month}
+        GROUP BY schedule_date
+        ORDER BY schedule_date ASC       
+	</select>
+	
+	<select id="selectScheduleByDay" parameterType="Map" resultType="com.diary.vo.Schedule">
+		SELECT
+			schedule_no scheduleNo,
+			schedule_memo scheduleMemo,
+			schedule_emoji scheduleEmoji
+		FROM schedule
+		WHERE member_id = #{memberId} 
+		AND YEAR(schedule_date) = #{scheduleYear} 
+		AND MONTH(schedule_date) = #{scheduleMonth}
+		AND DAY(schedule_date) = #{scheduleDay}
+	</select>
+	
+	<insert id="addSchedule" parameterType="Map">
+		INSERT INTO schedule(
+			member_id, 
+			schedule_date, 
+			schedule_memo,
+			schedule_emoji
+		) VALUES(
+			#{memberId}, 
+			#{scheduleDate}, 
+			#{scheduleMemo},
+			#{scheduleEmoji}
+		)
+	</insert>
+	
+	<update id="updateSchedule" parameterType="com.diary.vo.Schedule">
+		UPDATE schedule 
+		SET schedule_memo = #{scheduleMemo}, schedule_emoji = #{scheduleEmoji}
+		WHERE schedule_no = #{scheduleNo}
+	</update>
+	
+	<delete id="deleteSchedule" parameterType="int">
+		DELETE 
+		FROM schedule 
+		WHERE schedule_no = #{scheduleNo}
+	</delete>
+</mapper>

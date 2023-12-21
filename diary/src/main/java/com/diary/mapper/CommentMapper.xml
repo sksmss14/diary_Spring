@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.diary.mapper.CommentMapper">
+
+	<select id="getCommentCount" parameterType="int" resultType="int">
+		SELECT 
+			COUNT(*) 
+		FROM comment 
+		WHERE notice_no = #{noticeNo}
+	</select>
+	
+	<select id="selectCommentList" parameterType="int" resultType="com.diary.vo.Comment">
+		SELECT 
+			c.notice_no noticeNo,
+			m.member_id memberId, 
+			c.createdate createdate,
+			c.comment_no commentNo, 
+			c.comment comment, 
+			c.is_secret isSecret
+		FROM member m INNER JOIN comment c
+		ON m.member_id = c.member_id
+		WHERE c.notice_no = #{noticeNo}
+		ORDER BY c.createdate
+	</select>
+	
+	<select id="selectCommentOne" parameterType="int" resultType="com.diary.vo.Comment">
+		SELECT
+			comment_no commentNo,
+			notice_no noticeNo,
+			member_id memberId,
+			comment,
+			is_secret isSecret
+		FROM comment
+		WHERE comment_no = #{commentNo}
+	</select>
+	
+	<insert id="addComment" parameterType="com.diary.vo.Comment">
+		INSERT INTO comment(
+			notice_no, 
+			member_id, 
+			comment,
+			is_secret
+		) VALUES(
+			#{noticeNo}, 
+			#{memberId}, 
+			#{comment},
+			#{isSecret}
+		)
+	</insert>
+	
+	<select id="checkPassword" parameterType="com.diary.vo.Member" resultType="int">
+		SELECT COUNT(*)
+		FROM member
+		WHERE member_id = #{memberId}
+		AND member_pw = PASSWORD(#{memberPw})
+	</select>
+	
+	<update id="updateComment" parameterType="com.diary.vo.Comment">
+		UPDATE comment
+		SET comment = #{comment}, is_secret = #{isSecret}
+		WHERE comment_no = #{commentNo}
+	</update>
+	
+	<delete id="deleteAllComments" parameterType="int">
+		DELETE 
+		FROM comment 
+		WHERE notice_no = #{noticeNo}
+	</delete>
+	
+	<delete id="deleteComment" parameterType="int">
+		DELETE
+		FROM comment
+		WHERE comment_no = #{commentNo}
+	</delete>
+	
+</mapper>
